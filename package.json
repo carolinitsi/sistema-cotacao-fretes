@@ -11,13 +11,12 @@
     "typecheck": "nuxt typecheck"
   },
   "dependencies": {
-    "@iconify-json/lucide": "^1.2.139",
-    "@iconify-json/simple-icons": "^1.2.98",
     "@nuxt/ui": "^4.11.3",
     "nuxt": "^4.5.2",
     "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
+    "@iconify-json/lucide": "^1.2.139",
     "@nuxt/eslint": "^1.17.0",
     "eslint": "^10.12.0",
     "eslint-plugin-better-tailwindcss": "^4.7.0",
