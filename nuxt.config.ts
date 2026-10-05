@@ -17,6 +17,12 @@ export default defineNuxtConfig({
 
   compatibilityDate: '2026-06-30',
 
+  // O Nuxt 4 já gera os tsconfigs com strict e noUncheckedIndexedAccess.
+  // strict fica explícito aqui para não depender do padrão.
+  typescript: {
+    strict: true
+  },
+
   eslint: {
     config: {
       stylistic: {

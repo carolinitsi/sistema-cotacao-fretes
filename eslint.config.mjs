@@ -15,5 +15,10 @@ export default withNuxt(
         ]
       }
     }
+  },
+  {
+    rules: {
+      'vue/block-lang': ['error', { script: { lang: 'ts' } }]
+    }
   }
 )
