@@ -11,8 +11,11 @@ export default defineNuxtConfig({
 
   css: ['~/assets/css/main.css'],
 
-  routeRules: {
-    '/': { prerender: true }
+  // Só o que o cliente precisa; sobrescrito por NUXT_PUBLIC_APP_NAME.
+  runtimeConfig: {
+    public: {
+      appName: 'FretePro'
+    }
   },
 
   compatibilityDate: '2026-06-30',
