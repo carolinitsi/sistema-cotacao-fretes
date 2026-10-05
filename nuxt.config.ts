@@ -20,7 +20,14 @@ export default defineNuxtConfig({
   // O Nuxt 4 já gera os tsconfigs com strict e noUncheckedIndexedAccess.
   // strict fica explícito aqui para não depender do padrão.
   typescript: {
-    strict: true
+    strict: true,
+    // Inclui os testes no typecheck (por padrão o Nuxt só cobre tests/nuxt).
+    tsConfig: {
+      include: ['../tests/unit/**/*', '../tests/component/**/*', '../tests/mocks/**/*']
+    },
+    nodeTsConfig: {
+      include: ['../tests/e2e/**/*', '../vitest.config.ts', '../playwright.config.ts']
+    }
   },
 
   eslint: {
