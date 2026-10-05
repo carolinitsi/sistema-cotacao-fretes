@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@nuxt/ui": "^4.11.3",
+    "@tanstack/vue-query": "^5.104.1",
     "nuxt": "^4.5.2",
     "tailwindcss": "^4.3.3"
   },
