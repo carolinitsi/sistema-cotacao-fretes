@@ -1,64 +1,90 @@
-# Nuxt Starter Template
+# Sistema de cotação de fretes
 
-[![Nuxt UI](https://img.shields.io/badge/Made%20with-Nuxt%20UI-00DC82?logo=nuxt&labelColor=020420)](https://ui.nuxt.com)
+Sistema de cotação de fretes desenvolvido como teste técnico para a vaga de Front-end Pleno (Vue/Nuxt).
 
-Use this template to get started with [Nuxt UI](https://ui.nuxt.com) quickly.
+Stack: Nuxt 4, Vue 3, TypeScript estrito, Nuxt UI + Tailwind CSS 4, TanStack Vue Query, zod,
+Vitest, MSW e Playwright.
 
-- [Live demo](https://starter-template.nuxt.dev/)
-- [Documentation](https://ui.nuxt.com/docs/getting-started/installation/nuxt)
+## Requisitos
 
-<a href="https://starter-template.nuxt.dev/" target="_blank">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://ui.nuxt.com/assets/templates/nuxt/starter-dark.png">
-    <source media="(prefers-color-scheme: light)" srcset="https://ui.nuxt.com/assets/templates/nuxt/starter-light.png">
-    <img alt="Nuxt Starter Template" src="https://ui.nuxt.com/assets/templates/nuxt/starter-light.png" width="830" height="466">
-  </picture>
-</a>
+- Node.js 22 LTS (versão em [`.nvmrc`](.nvmrc); com nvm: `nvm use`)
+- pnpm (versão fixada em `packageManager` no `package.json`; com Corepack: `corepack enable`)
 
-> The starter template for Vue is on https://github.com/nuxt-ui-templates/starter-vue.
-
-## Quick Start
-
-```bash [Terminal]
-npm create nuxt@latest -- -t ui
-```
-
-## Deploy your own
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-name=starter&repository-url=https%3A%2F%2Fgithub.com%2Fnuxt-ui-templates%2Fstarter&demo-image=https%3A%2F%2Fui.nuxt.com%2Fassets%2Ftemplates%2Fnuxt%2Fstarter-dark.png&demo-url=https%3A%2F%2Fstarter-template.nuxt.dev%2F&demo-title=Nuxt%20Starter%20Template&demo-description=A%20minimal%20template%20to%20get%20started%20with%20Nuxt%20UI.)
-
-## Setup
-
-Make sure to install the dependencies:
+## Instalação
 
 ```bash
 pnpm install
 ```
 
-## Development Server
+O `postinstall` roda `nuxt prepare`, que gera os tipos e a config do ESLint em `.nuxt/`.
 
-Start the development server on `http://localhost:3000`:
+## Variáveis de ambiente
 
-```bash
-pnpm dev
-```
-
-## Production
-
-Build the application for production:
+Copie o exemplo e ajuste se necessário:
 
 ```bash
-pnpm build
+cp .env.example .env
 ```
 
-Locally preview production build:
+| Variável | Descrição | Padrão |
+|----------|-----------|--------|
+| `NUXT_PUBLIC_APP_NAME` | Nome exibido no título das páginas | `FretePro` |
+
+Todas são opcionais: sem `.env` o app usa os valores padrão do `nuxt.config.ts`.
+
+## Como rodar
 
 ```bash
-pnpm preview
+pnpm dev        # http://localhost:3000
+pnpm build      # build de produção
+pnpm preview    # serve o build de produção
 ```
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+## Qualidade e testes
 
-## Renovate integration
+```bash
+pnpm lint        # ESLint (@nuxt/eslint)
+pnpm typecheck   # vue-tsc via nuxt typecheck (inclui os testes)
+pnpm test        # Vitest: projetos unit e component
+pnpm test:watch  # Vitest em modo watch
+pnpm test:e2e    # Playwright (Chromium)
+```
 
-Install [Renovate GitHub app](https://github.com/apps/renovate/installations/select_target) on your repository and you are good to go.
+Na primeira execução do E2E, instale o navegador:
+
+```bash
+pnpm exec playwright install chromium
+```
+
+O `pnpm test:e2e` faz o build e sobe o app em `http://localhost:3100` automaticamente.
+
+O CI ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)) roda lint, typecheck, test e test:e2e
+em todo push e pull request.
+
+## Estrutura de pastas
+
+```
+app/
+  components/ui/              componentes visuais genéricos
+  components/features/quote/  componentes da funcionalidade de cotação
+  composables/                acesso à API via Vue Query
+  pages/                      rotas
+  plugins/                    plugins do Nuxt (Vue Query)
+  schemas/                    schemas zod (fonte da verdade da validação)
+  utils/                      funções puras (formatadores, máscaras)
+server/api/                   API mock (server routes do Nitro)
+tests/
+  unit/                       Vitest em ambiente Node (schemas, utils)
+  component/                  Vitest em ambiente Nuxt (componentes)
+  mocks/                      handlers e servidor do MSW
+  e2e/                        Playwright
+docs/                         registro de decisões
+```
+
+## Decisões técnicas
+
+A preencher. O registro completo fica em [`docs/DECISIONS.md`](docs/DECISIONS.md).
+
+## Limitações conhecidas
+
+A preencher.
