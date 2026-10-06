@@ -1,0 +1,383 @@
+{
+  "color": {
+    "brand": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.9803921580314636,
+          0.7333333492279053,
+          0.007843137718737125
+        ],
+        "alpha": 1,
+        "hex": "#FABB02"
+      },
+      "$description": "FretePro — proposta extraída de imagens. Validar no original. Alias proposto: yellow/500",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:5:17",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:02296c2389e277d065f0d2f3799badabf92bca8d/-1:-1",
+          "targetVariableName": "yellow/500",
+          "targetVariableSetId": "VariableCollectionId:bb54bfdd156c6a5956343d336f12ef7dceaf3e0e/-1:-1",
+          "targetVariableSetName": "FretePro · Primitivos"
+        }
+      }
+    },
+    "action": {
+      "primary": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9803921580314636,
+            0.7333333492279053,
+            0.007843137718737125
+          ],
+          "alpha": 1,
+          "hex": "#FABB02"
+        },
+        "$description": "FretePro — proposta extraída de imagens. Validar no original. Alias proposto: yellow/500",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:5:18",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:02296c2389e277d065f0d2f3799badabf92bca8d/-1:-1",
+            "targetVariableName": "yellow/500",
+            "targetVariableSetId": "VariableCollectionId:bb54bfdd156c6a5956343d336f12ef7dceaf3e0e/-1:-1",
+            "targetVariableSetName": "FretePro · Primitivos"
+          }
+        }
+      },
+      "disabled": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.7215686440467834,
+            0.7607843279838562,
+            0.8117647171020508
+          ],
+          "alpha": 1,
+          "hex": "#B8C2CF"
+        },
+        "$description": "FretePro — proposta extraída de imagens. Validar no original. Alias proposto: neutral/400",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:5:29",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:69abe5c415552263b0f914b9e70078a36dc0b4bc/-1:-1",
+            "targetVariableName": "neutral/400",
+            "targetVariableSetId": "VariableCollectionId:bb54bfdd156c6a5956343d336f12ef7dceaf3e0e/-1:-1",
+            "targetVariableSetName": "FretePro · Primitivos"
+          }
+        }
+      }
+    },
+    "bg": {
+      "page": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9607843160629272,
+            0.9686274528503418,
+            0.9764705896377563
+          ],
+          "alpha": 1,
+          "hex": "#F5F7F9"
+        },
+        "$description": "FretePro — proposta extraída de imagens. Validar no original. Alias proposto: neutral/50",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:5:19",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:aec0fb073bb4ea9b6614c71e86fa09c3cf9697ac/-1:-1",
+            "targetVariableName": "neutral/50",
+            "targetVariableSetId": "VariableCollectionId:bb54bfdd156c6a5956343d336f12ef7dceaf3e0e/-1:-1",
+            "targetVariableSetName": "FretePro · Primitivos"
+          }
+        }
+      }
+    },
+    "surface": {
+      "default": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1,
+            1,
+            1
+          ],
+          "alpha": 1,
+          "hex": "#FFFFFF"
+        },
+        "$description": "FretePro — proposta extraída de imagens. Validar no original. Alias proposto: neutral/0",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:5:20",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:2fb3318792abff24707851540b78032e4db625f8/-1:-1",
+            "targetVariableName": "neutral/0",
+            "targetVariableSetId": "VariableCollectionId:bb54bfdd156c6a5956343d336f12ef7dceaf3e0e/-1:-1",
+            "targetVariableSetName": "FretePro · Primitivos"
+          }
+        }
+      },
+      "subtle": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9450980424880981,
+            0.9607843160629272,
+            0.9764705896377563
+          ],
+          "alpha": 1,
+          "hex": "#F1F5F9"
+        },
+        "$description": "FretePro — proposta extraída de imagens. Validar no original. Alias proposto: neutral/100",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:5:21",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:4c758d2ad166a5c7b17ea2614be28c33b58b7609/-1:-1",
+            "targetVariableName": "neutral/100",
+            "targetVariableSetId": "VariableCollectionId:bb54bfdd156c6a5956343d336f12ef7dceaf3e0e/-1:-1",
+            "targetVariableSetName": "FretePro · Primitivos"
+          }
+        }
+      },
+      "selected": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9921568632125854,
+            0.95686274766922,
+            0.8666666746139526
+          ],
+          "alpha": 1,
+          "hex": "#FDF4DD"
+        },
+        "$description": "FretePro — proposta extraída de imagens. Validar no original. Alias proposto: yellow/50",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:5:22",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:ffd521393db6a573a50cdd04dd68a622122dbe83/-1:-1",
+            "targetVariableName": "yellow/50",
+            "targetVariableSetId": "VariableCollectionId:bb54bfdd156c6a5956343d336f12ef7dceaf3e0e/-1:-1",
+            "targetVariableSetName": "FretePro · Primitivos"
+          }
+        }
+      },
+      "error": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1,
+            0.9529411792755127,
+            0.95686274766922
+          ],
+          "alpha": 1,
+          "hex": "#FFF3F4"
+        },
+        "$description": "FretePro — proposta extraída de imagens. Validar no original. Alias proposto: red/50",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:5:28",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:30c9b0315de40fe5b6d8d3ea6a6a4bd428da94ad/-1:-1",
+            "targetVariableName": "red/50",
+            "targetVariableSetId": "VariableCollectionId:bb54bfdd156c6a5956343d336f12ef7dceaf3e0e/-1:-1",
+            "targetVariableSetName": "FretePro · Primitivos"
+          }
+        }
+      }
+    },
+    "text": {
+      "primary": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.05882352963089943,
+            0.09019608050584793,
+            0.16470588743686676
+          ],
+          "alpha": 1,
+          "hex": "#0F172A"
+        },
+        "$description": "FretePro — proposta extraída de imagens. Validar no original. Alias proposto: neutral/900",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:5:23",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:c530e487fd686b28972469dc9f4480d05049af4e/-1:-1",
+            "targetVariableName": "neutral/900",
+            "targetVariableSetId": "VariableCollectionId:bb54bfdd156c6a5956343d336f12ef7dceaf3e0e/-1:-1",
+            "targetVariableSetName": "FretePro · Primitivos"
+          }
+        }
+      },
+      "secondary": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.3921568691730499,
+            0.45490196347236633,
+            0.545098066329956
+          ],
+          "alpha": 1,
+          "hex": "#64748B"
+        },
+        "$description": "FretePro — proposta extraída de imagens. Validar no original. Alias proposto: neutral/500",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:5:24",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:f0e2dfed323b69f6e2f9c35b19c9efbfbbbd7722/-1:-1",
+            "targetVariableName": "neutral/500",
+            "targetVariableSetId": "VariableCollectionId:bb54bfdd156c6a5956343d336f12ef7dceaf3e0e/-1:-1",
+            "targetVariableSetName": "FretePro · Primitivos"
+          }
+        }
+      },
+      "selected": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.7254902124404907,
+            0.47058823704719543,
+            0
+          ],
+          "alpha": 1,
+          "hex": "#B97800"
+        },
+        "$description": "FretePro — proposta extraída de imagens. Validar no original. Alias proposto: amber/700",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:5:25",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:f3eca1f0b9b358880463a8a62419584468cb60a6/-1:-1",
+            "targetVariableName": "amber/700",
+            "targetVariableSetId": "VariableCollectionId:bb54bfdd156c6a5956343d336f12ef7dceaf3e0e/-1:-1",
+            "targetVariableSetName": "FretePro · Primitivos"
+          }
+        }
+      },
+      "onDisabled": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1,
+            1,
+            1
+          ],
+          "alpha": 1,
+          "hex": "#FFFFFF"
+        },
+        "$description": "FretePro — proposta extraída de imagens. Validar no original. Alias proposto: neutral/0",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:5:30",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:2fb3318792abff24707851540b78032e4db625f8/-1:-1",
+            "targetVariableName": "neutral/0",
+            "targetVariableSetId": "VariableCollectionId:bb54bfdd156c6a5956343d336f12ef7dceaf3e0e/-1:-1",
+            "targetVariableSetName": "FretePro · Primitivos"
+          }
+        }
+      }
+    },
+    "border": {
+      "default": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.886274516582489,
+            0.9098039269447327,
+            0.9411764740943909
+          ],
+          "alpha": 1,
+          "hex": "#E2E8F0"
+        },
+        "$description": "FretePro — proposta extraída de imagens. Validar no original. Alias proposto: neutral/200",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:5:26",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:eeedfbd840c1856a7e50672df806d7c0c43591ca/-1:-1",
+            "targetVariableName": "neutral/200",
+            "targetVariableSetId": "VariableCollectionId:bb54bfdd156c6a5956343d336f12ef7dceaf3e0e/-1:-1",
+            "targetVariableSetName": "FretePro · Primitivos"
+          }
+        }
+      }
+    },
+    "feedback": {
+      "error": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1,
+            0.23137255012989044,
+            0.2705882489681244
+          ],
+          "alpha": 1,
+          "hex": "#FF3B45"
+        },
+        "$description": "FretePro — proposta extraída de imagens. Validar no original. Alias proposto: red/500",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:5:27",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:8907fd448db7233eefcacfb266ad9f991051a815/-1:-1",
+            "targetVariableName": "red/500",
+            "targetVariableSetId": "VariableCollectionId:bb54bfdd156c6a5956343d336f12ef7dceaf3e0e/-1:-1",
+            "targetVariableSetName": "FretePro · Primitivos"
+          }
+        }
+      }
+    }
+  },
+  "$extensions": {
+    "com.figma.modeName": "Referência"
+  }
+}
