@@ -70,8 +70,8 @@ app/
   composables/                acesso à API via Vue Query
   pages/                      rotas
   plugins/                    plugins do Nuxt (Vue Query)
-  schemas/                    schemas zod (fonte da verdade da validação)
   utils/                      funções puras (formatadores, máscaras)
+shared/schemas/               schemas zod usados pelo app e pelo server (fonte da verdade da validação)
 server/api/                   API mock (server routes do Nitro)
 tests/
   unit/                       Vitest em ambiente Node (schemas, utils)

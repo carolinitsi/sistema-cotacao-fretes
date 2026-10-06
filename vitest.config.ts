@@ -8,7 +8,10 @@ export default defineConfig({
       {
         // Testes puros (schemas, utils) sem subir o Nuxt: mais rápidos.
         resolve: {
-          alias: { '~': fileURLToPath(new URL('./app', import.meta.url)) }
+          alias: {
+            '~': fileURLToPath(new URL('./app', import.meta.url)),
+            '#shared': fileURLToPath(new URL('./shared', import.meta.url))
+          }
         },
         test: {
           name: 'unit',

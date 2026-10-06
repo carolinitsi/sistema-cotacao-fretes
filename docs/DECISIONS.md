@@ -30,7 +30,7 @@ Decisões técnicas relevantes e seus trade-offs. Cada entrada segue o formato:
 ## 003. zod para validação
 
 - **Contexto:** a mesma regra de validação deve valer no formulário e na API.
-- **Decisão:** schemas zod em `app/schemas` como fonte única da verdade, inferindo os tipos TypeScript a partir deles.
+- **Decisão:** schemas zod como fonte única da verdade, inferindo os tipos TypeScript a partir deles. Ficam em `shared/schemas` (ver 017).
 - **Alternativas:** Valibot; Yup; validação manual.
 - **Motivo:** é aceito diretamente pelo `UForm` do Nuxt UI, tem inferência de tipos e roda no cliente e no servidor.
 
@@ -131,3 +131,10 @@ Decisões técnicas relevantes e seus trade-offs. Cada entrada segue o formato:
 - **Decisão:** passar `pt_br` (`@nuxt/ui/locale`) para o `UApp` em `app/app.vue`.
 - **Alternativas:** sobrescrever o `aria-label` de cada componente.
 - **Motivo:** leitores de tela anunciam os controles no idioma da página, e isso vale para todos os componentes de uma vez.
+
+## 017. Schemas em `shared/`
+
+- **Contexto:** o schema zod da cotação é usado pelo formulário (app) e pela API mock (server). A pasta prevista, `app/schemas`, pertence ao app Vue. No Nuxt 4, o server não deve importar código de `app/`.
+- **Decisão:** os schemas ficam em `shared/schemas`, a convenção do Nuxt 4 para código comum ao app e ao server, e são importados explicitamente por `#shared/schemas/...`. O projeto `unit` do Vitest ganha o alias `#shared`. Máscaras e formatadores continuam em `app/utils`, porque só o app os usa.
+- **Alternativas:** manter em `app/schemas` e importar no server pelo caminho da raiz; `shared/utils`, que tem auto-import.
+- **Motivo:** segue a estrutura que o próprio Nuxt gera e verifica (o `tsconfig.shared.json` e a proteção de imports impedem `shared/` de depender de `app/` ou `server/`). O import explícito deixa claro de onde vem o schema, sem misturar schemas com utils auto-importadas.
