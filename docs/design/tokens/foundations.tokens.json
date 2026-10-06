@@ -1,0 +1,412 @@
+{
+  "space": {
+    "8": {
+      "$type": "number",
+      "$value": 8,
+      "$description": "FretePro — proposta extraída de imagens. Validar no original. Espaçamento estimado em px.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:5:31",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ]
+      }
+    },
+    "12": {
+      "$type": "number",
+      "$value": 12,
+      "$description": "FretePro — proposta extraída de imagens. Validar no original. Espaçamento estimado em px.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:5:32",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ]
+      }
+    },
+    "16": {
+      "$type": "number",
+      "$value": 16,
+      "$description": "FretePro — proposta extraída de imagens. Validar no original. Espaçamento estimado em px.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:5:33",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ]
+      }
+    },
+    "24": {
+      "$type": "number",
+      "$value": 24,
+      "$description": "FretePro — proposta extraída de imagens. Validar no original. Espaçamento estimado em px.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:5:34",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ]
+      }
+    }
+  },
+  "radius": {
+    "control": {
+      "$type": "number",
+      "$value": 6,
+      "$description": "FretePro — proposta extraída de imagens. Validar no original. Raio estimado em px.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:5:35",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ]
+      }
+    },
+    "card": {
+      "$type": "number",
+      "$value": 8,
+      "$description": "FretePro — proposta extraída de imagens. Validar no original. Raio estimado em px.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:5:36",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ]
+      }
+    }
+  },
+  "border": {
+    "width": {
+      "default": {
+        "$type": "number",
+        "$value": 1,
+        "$description": "FretePro — proposta extraída de imagens. Validar no original. Borda estimada em px.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:5:37",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      }
+    },
+    "style": {
+      "default": {
+        "$type": "string",
+        "$value": "solid",
+        "$description": "FretePro — proposta extraída de imagens. Validar no original. Metadado: estilo de borda, não vinculável diretamente.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:5:38",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ],
+          "com.figma.type": "string"
+        }
+      }
+    }
+  },
+  "type": {
+    "family": {
+      "$type": "string",
+      "$value": "Inter",
+      "$description": "FretePro — proposta extraída de imagens. Validar no original. Família proposta; fonte original não identificada.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:5:39",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ],
+        "com.figma.type": "string"
+      }
+    },
+    "title": {
+      "size": {
+        "$type": "number",
+        "$value": 24,
+        "$description": "FretePro — proposta extraída de imagens. Validar no original. Métrica tipográfica proposta; não medida no raster.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:5:40",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "weight": {
+        "$type": "number",
+        "$value": 700,
+        "$description": "FretePro — proposta extraída de imagens. Validar no original. Métrica tipográfica proposta; não medida no raster.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:5:41",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "lineHeight": {
+        "$type": "number",
+        "$value": 32,
+        "$description": "FretePro — proposta extraída de imagens. Validar no original. Métrica tipográfica proposta; não medida no raster.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:5:42",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      }
+    },
+    "section": {
+      "size": {
+        "$type": "number",
+        "$value": 16,
+        "$description": "FretePro — proposta extraída de imagens. Validar no original. Métrica tipográfica proposta; não medida no raster.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:5:43",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "weight": {
+        "$type": "number",
+        "$value": 600,
+        "$description": "FretePro — proposta extraída de imagens. Validar no original. Métrica tipográfica proposta; não medida no raster.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:5:44",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "lineHeight": {
+        "$type": "number",
+        "$value": 24,
+        "$description": "FretePro — proposta extraída de imagens. Validar no original. Métrica tipográfica proposta; não medida no raster.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:5:45",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      }
+    },
+    "body": {
+      "size": {
+        "$type": "number",
+        "$value": 14,
+        "$description": "FretePro — proposta extraída de imagens. Validar no original. Métrica tipográfica proposta; não medida no raster.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:5:46",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "weight": {
+        "$type": "number",
+        "$value": 400,
+        "$description": "FretePro — proposta extraída de imagens. Validar no original. Métrica tipográfica proposta; não medida no raster.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:5:47",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "lineHeight": {
+        "$type": "number",
+        "$value": 20,
+        "$description": "FretePro — proposta extraída de imagens. Validar no original. Métrica tipográfica proposta; não medida no raster.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:5:48",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      }
+    },
+    "label": {
+      "size": {
+        "$type": "number",
+        "$value": 14,
+        "$description": "FretePro — proposta extraída de imagens. Validar no original. Métrica tipográfica proposta; não medida no raster.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:5:49",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "weight": {
+        "$type": "number",
+        "$value": 500,
+        "$description": "FretePro — proposta extraída de imagens. Validar no original. Métrica tipográfica proposta; não medida no raster.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:5:50",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "lineHeight": {
+        "$type": "number",
+        "$value": 20,
+        "$description": "FretePro — proposta extraída de imagens. Validar no original. Métrica tipográfica proposta; não medida no raster.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:5:51",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      }
+    },
+    "caption": {
+      "size": {
+        "$type": "number",
+        "$value": 12,
+        "$description": "FretePro — proposta extraída de imagens. Validar no original. Métrica tipográfica proposta; não medida no raster.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:5:52",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "weight": {
+        "$type": "number",
+        "$value": 400,
+        "$description": "FretePro — proposta extraída de imagens. Validar no original. Métrica tipográfica proposta; não medida no raster.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:5:53",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "lineHeight": {
+        "$type": "number",
+        "$value": 16,
+        "$description": "FretePro — proposta extraída de imagens. Validar no original. Métrica tipográfica proposta; não medida no raster.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:5:54",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      }
+    },
+    "button": {
+      "weight": {
+        "$type": "number",
+        "$value": 600,
+        "$description": "FretePro — proposta extraída de imagens. Validar no original. Peso proposto do botão.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:5:55",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      }
+    }
+  },
+  "size": {
+    "icon": {
+      "$type": "number",
+      "$value": 16,
+      "$description": "FretePro — proposta extraída de imagens. Validar no original. Tamanho proposto em px.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:5:57",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ]
+      }
+    },
+    "control": {
+      "height": {
+        "$type": "number",
+        "$value": 40,
+        "$description": "FretePro — proposta extraída de imagens. Validar no original. Altura proposta em px.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:5:56",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      }
+    }
+  },
+  "shadow": {
+    "none": {
+      "$type": "string",
+      "$value": "none",
+      "$description": "FretePro — proposta extraída de imagens. Validar no original. Sem sombra; metadado.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:5:58",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ],
+        "com.figma.type": "string"
+      }
+    },
+    "subtle": {
+      "x": {
+        "$type": "number",
+        "$value": 0,
+        "$description": "FretePro — proposta extraída de imagens. Validar no original. Hipótese de sombra, não confirmada.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:5:59",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "y": {
+        "$type": "number",
+        "$value": 2,
+        "$description": "FretePro — proposta extraída de imagens. Validar no original. Hipótese de sombra, não confirmada.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:5:60",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "blur": {
+        "$type": "number",
+        "$value": 8,
+        "$description": "FretePro — proposta extraída de imagens. Validar no original. Hipótese de sombra, não confirmada.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:5:61",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "spread": {
+        "$type": "number",
+        "$value": 0,
+        "$description": "FretePro — proposta extraída de imagens. Validar no original. Hipótese de sombra, não confirmada.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:5:62",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "color": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.05882352963089943,
+            0.09019608050584793,
+            0.16470588743686676
+          ],
+          "alpha": 0.0313725508749485,
+          "hex": "#0F172A"
+        },
+        "$description": "FretePro — proposta extraída de imagens. Validar no original. Hipótese de sombra, não confirmada. Efeitos não são tokens compostos nativos.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:5:63",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      }
+    }
+  },
+  "$extensions": {
+    "com.figma.modeName": "Referência"
+  }
+}

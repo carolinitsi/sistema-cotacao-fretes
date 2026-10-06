@@ -68,3 +68,45 @@ Decisões técnicas relevantes e seus trade-offs. Cada entrada segue o formato:
 - **Decisão:** incluir `tests/` e as configs de teste via `typescript.tsConfig` e `typescript.nodeTsConfig` no `nuxt.config.ts`.
 - **Alternativas:** rodar o typecheck dos testes em um script separado; renomear as pastas para o padrão do Nuxt.
 - **Motivo:** um único comando cobre tudo e mantém a estrutura de pastas definida para o projeto.
+
+## 009. Design tokens em três camadas
+
+- **Contexto:** os tokens do Figma chegam como JSON (primitivos, semânticos e fundamentos) e precisam alimentar o Tailwind 4 e o Nuxt UI sem que os componentes dependam de hex ou px soltos.
+- **Decisão:** `app/assets/css/tokens.css` expõe variáveis `--fp-*` em três camadas: primitivos (valores), semânticos (só `var()` para primitivos) e fundamentos (medidas, tipografia, sombra). Os valores derivados ficam numa seção separada. O `main.css` só referencia esses tokens no `@theme` e nas variáveis `--ui-*`, e o `app.config.ts` usa as utilities resultantes.
+- **Alternativas:** colocar os valores direto no `@theme` (`--color-*`) e nas `--ui-*`; gerar o CSS com Style Dictionary.
+- **Motivo:** cada camada tem um papel claro e o nome mapeia 1:1 com o Figma (`text.onDisabled` → `--fp-text-on-disabled`). Trocar um primitivo propaga para tudo, e os tokens do design não se confundem com os internos do Nuxt UI. Style Dictionary seria uma dependência a mais para cerca de 60 variáveis.
+
+## 010. Variantes de acessibilidade sem alterar os tokens do design
+
+- **Contexto:** alguns pares de texto do design ficam abaixo de 4,5:1: text/secondary sobre bg/page tem 4,43, text/selected sobre surface/selected tem 3,33 e feedback/error sobre surface/error tem 3,25. Além disso, o amarelo da marca tem só 1,73:1 contra branco e não serve como anel de foco.
+- **Decisão:** criar variantes derivadas (`--fp-text-secondary-a11y`, `--fp-text-selected-a11y`, `--fp-text-error-a11y`) que mantêm matiz e croma em OKLCH e escurecem só o necessário para 4,5:1, além de `--fp-focus-ring` = `amber/700` (3,65:1). Os componentes usam as variantes, e os tokens originais continuam iguais ao Figma.
+- **Alternativas:** corrigir os próprios tokens do design; aceitar o contraste baixo; escolher tons arbitrários de outra paleta.
+- **Motivo:** o export continua fiel ao Figma e comparável a ele, a correção fica rastreável e reversível quando o design for revisado, e a mudança visual é mínima (ΔL ≤ 0,08).
+
+## 011. Teste contra divergência entre JSON e CSS
+
+- **Contexto:** os tokens foram copiados à mão do JSON para o CSS e o export ainda vai mudar após a validação no Figma original.
+- **Decisão:** `tests/unit/design-tokens.test.ts` lê os três JSONs e o `tokens.css` e confere:
+  - hex dos primitivos;
+  - aliases dos semânticos;
+  - medidas dos fundamentos;
+  - família de `--font-sans`;
+  - contraste dos pares de texto e foco.
+
+  Também acusa uma variante a11y que deixou de ser necessária.
+- **Alternativas:** gerar o CSS a partir do JSON num passo de build; conferência manual.
+- **Motivo:** o teste roda em Node, em milissegundos, sem dependência nova nem etapa de build extra, e quebra o CI com uma mensagem que aponta exatamente o token divergente.
+
+## 012. Escala de espaçamento padrão do Tailwind e cálculo OKLCH documentado
+
+- **Contexto:** os espaçamentos do design (8/12/16/24px) coincidem com a escala padrão do Tailwind (`2`/`3`/`4`/`6`, base 4px). Além disso, a escala brand e as variantes a11y foram calculadas em OKLCH.
+- **Decisão:** usar a escala padrão do Tailwind para espaçamento, sem utilities nomeadas. Os `--fp-space-*` ficam como referência documentada. O cálculo OKLCH fica descrito em `docs/design-tokens.md` e nos comentários de `tokens.css`, sem script versionado.
+- **Alternativas:** utilities como `p-fp-12`; um script `scripts/derive-tokens.mjs` no repositório.
+- **Motivo:** utilities próprias duplicariam valores que já existem. O cálculo roda uma vez por revisão do design, e o teste de contraste garante o resultado, então um script versionado seria só mais um arquivo para manter.
+
+## 013. Modo claro fixo
+
+- **Contexto:** o Nuxt UI ativa o color mode (claro/escuro) por padrão, mas o design só define tokens para o modo claro.
+- **Decisão:** `colorMode.preference` e `fallback` fixos em `light` no `nuxt.config.ts`. As variáveis `--ui-*` são sobrescritas só em `:root`.
+- **Alternativas:** manter o modo escuro com os valores padrão do Nuxt UI; desligar o módulo com `ui.colorMode: false`.
+- **Motivo:** evita uma tela escura que mistura tokens do design com cores do Nuxt UI, sem remover o módulo, que pode ser reaproveitado quando houver design escuro.

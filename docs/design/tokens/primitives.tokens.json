@@ -1,0 +1,253 @@
+{
+  "yellow": {
+    "50": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.9921568632125854,
+          0.95686274766922,
+          0.8666666746139526
+        ],
+        "alpha": 1,
+        "hex": "#FDF4DD"
+      },
+      "$description": "FretePro — proposta extraída de imagens. Validar no original. HEX aproximado: #fdf4dd",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:5:6",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ]
+      }
+    },
+    "500": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.9803921580314636,
+          0.7333333492279053,
+          0.007843137718737125
+        ],
+        "alpha": 1,
+        "hex": "#FABB02"
+      },
+      "$description": "FretePro — proposta extraída de imagens. Validar no original. HEX aproximado: #fabb02",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:5:5",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ]
+      }
+    }
+  },
+  "amber": {
+    "700": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.7254902124404907,
+          0.47058823704719543,
+          0
+        ],
+        "alpha": 1,
+        "hex": "#B97800"
+      },
+      "$description": "FretePro — proposta extraída de imagens. Validar no original. HEX aproximado: #B97800",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:5:7",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ]
+      }
+    }
+  },
+  "neutral": {
+    "0": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          1,
+          1
+        ],
+        "alpha": 1,
+        "hex": "#FFFFFF"
+      },
+      "$description": "FretePro — proposta extraída de imagens. Validar no original. HEX aproximado: #FFFFFF",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:5:8",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ]
+      }
+    },
+    "50": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.9607843160629272,
+          0.9686274528503418,
+          0.9764705896377563
+        ],
+        "alpha": 1,
+        "hex": "#F5F7F9"
+      },
+      "$description": "FretePro — proposta extraída de imagens. Validar no original. HEX aproximado: #F5F7F9",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:5:9",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ]
+      }
+    },
+    "100": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.9450980424880981,
+          0.9607843160629272,
+          0.9764705896377563
+        ],
+        "alpha": 1,
+        "hex": "#F1F5F9"
+      },
+      "$description": "FretePro — proposta extraída de imagens. Validar no original. HEX aproximado: #F1F5F9",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:5:10",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ]
+      }
+    },
+    "200": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.886274516582489,
+          0.9098039269447327,
+          0.9411764740943909
+        ],
+        "alpha": 1,
+        "hex": "#E2E8F0"
+      },
+      "$description": "FretePro — proposta extraída de imagens. Validar no original. HEX aproximado: #E2E8F0",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:5:11",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ]
+      }
+    },
+    "400": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.7215686440467834,
+          0.7607843279838562,
+          0.8117647171020508
+        ],
+        "alpha": 1,
+        "hex": "#B8C2CF"
+      },
+      "$description": "FretePro — proposta extraída de imagens. Validar no original. HEX aproximado: #B8C2CF",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:5:12",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ]
+      }
+    },
+    "500": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.3921568691730499,
+          0.45490196347236633,
+          0.545098066329956
+        ],
+        "alpha": 1,
+        "hex": "#64748B"
+      },
+      "$description": "FretePro — proposta extraída de imagens. Validar no original. HEX aproximado: #64748B",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:5:13",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ]
+      }
+    },
+    "900": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.05882352963089943,
+          0.09019608050584793,
+          0.16470588743686676
+        ],
+        "alpha": 1,
+        "hex": "#0F172A"
+      },
+      "$description": "FretePro — proposta extraída de imagens. Validar no original. HEX aproximado: #0F172A",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:5:14",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ]
+      }
+    }
+  },
+  "red": {
+    "50": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          0.9529411792755127,
+          0.95686274766922
+        ],
+        "alpha": 1,
+        "hex": "#FFF3F4"
+      },
+      "$description": "FretePro — proposta extraída de imagens. Validar no original. HEX aproximado: #FFF3F4",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:5:16",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ]
+      }
+    },
+    "500": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          0.23137255012989044,
+          0.2705882489681244
+        ],
+        "alpha": 1,
+        "hex": "#FF3B45"
+      },
+      "$description": "FretePro — proposta extraída de imagens. Validar no original. HEX aproximado: #FF3B45",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:5:15",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ]
+      }
+    }
+  },
+  "$extensions": {
+    "com.figma.modeName": "Referência"
+  }
+}
