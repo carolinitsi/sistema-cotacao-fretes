@@ -38,4 +38,7 @@ Antes de finalizar qualquer tarefa, rode lint, typecheck e test.
 - Não faça push nem force-push sem eu pedir.
 
 ## Decisões
-Toda decisão técnica relevante ou trade-off entra em `docs/DECISIONS.md` (contexto, decisão, alternativas, motivo).
+
+Toda decisão técnica relevante ou trade-off deve ser registrado em `docs/DECISIONS.md`, contendo contexto, decisão, alternativas consideradas e motivo.
+
+Antes de implementar uma tarefa, consulte `docs/DECISIONS.md` quando houver decisões relevantes para o contexto. Após a implementação, registre novas decisões relevantes tomadas durante a tarefa.
