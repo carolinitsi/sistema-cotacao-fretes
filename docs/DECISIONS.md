@@ -54,6 +54,7 @@ Decisões técnicas relevantes e seus trade-offs. Cada entrada segue o formato:
 - **Decisão:** implementar a API mock em `server/api` com server routes do Nitro.
 - **Alternativas:** backend em Laravel; json-server; apenas MSW no navegador.
 - **Motivo:** roda no mesmo processo e no mesmo comando (`pnpm dev`), sem outra stack para instalar, e reaproveita os schemas zod para validar as requisições.
+- **Atualização:** a rota de cotação passou a integrar o Melhor Envio, e o mock virou um modo explícito de desenvolvimento (ver 021 e 022).
 
 ## 007. Testes em quatro camadas
 
@@ -159,3 +160,38 @@ Decisões técnicas relevantes e seus trade-offs. Cada entrada segue o formato:
 - **Decisão:** o botão fica habilitado e a validação roda no envio, com foco no primeiro campo inválido. Ele só fica desabilitado (com loading) enquanto a cotação é calculada. O ícone do seguro passa a ser `i-lucide-banknote`, porque o pin de mapa do design repete o ícone dos CEPs.
 - **Alternativas:** seguir o design e desabilitar o botão até o formulário ficar válido.
 - **Motivo:** um botão desabilitado não recebe foco nem explica por que não funciona. Quem usa teclado ou leitor de tela não descobre o que falta. Validar no envio mostra as mensagens de todos os campos de uma vez.
+
+## 021. Cotação pelo Melhor Envio, sempre via rota interna
+
+- **Contexto:** a cotação precisa de uma API real de frete. A do Melhor Envio exige token Bearer (OAuth2, 30 dias) e `User-Agent` com e-mail de contato. Esse token não pode chegar ao navegador. A decisão 006 previa só uma API mock em `server/api`.
+- **Decisão:** o app chama apenas `POST /api/freight/quote`, e a rota chama `POST /api/v2/me/shipment/calculate` no server. A URL base padrão é a do Sandbox. Token, URL base e user agent ficam no `runtimeConfig` privado (`NUXT_MELHOR_ENVIO_*`). O payload usa `products` com um único item (a encomenda), e as medidas são arredondadas para cima, porque a API as declara como inteiros. Sem fluxo OAuth no app: o token é gerado fora dele e renovado manualmente. Sem token ou user agent, a rota responde 503 ("Cotação de frete não configurada"). O núcleo (`server/utils/freight/`) usa o `fetch` global e não depende do h3, e a rota é só o adaptador.
+- **Alternativas:** chamar a API direto do navegador; implementar o fluxo OAuth com refresh token; payload por `volumes`; enviar as medidas com decimal.
+- **Motivo:** o segredo fica só no server, e a UI depende de um contrato próprio, não do formato da API externa. O OAuth completo (callback, armazenamento e renovação de token) é desproporcional para um teste de front-end com uma única conta. Usamos `products` porque o exemplo e o schema da doc concordam nele (o schema de `volumes` tem campos com erro de digitação, `heigth`/`lenght`). O arredondamento para cima nunca cota um pacote menor que o real.
+
+## 022. Mock de desenvolvimento explícito, nunca fallback
+
+- **Contexto:** sem credenciais do Melhor Envio, ainda é preciso rodar e demonstrar o fluxo. Ao mesmo tempo, dado simulado não pode esconder erro real nem chegar à produção.
+- **Decisão:** no modo mock, a rota devolve dados estáticos (`server/utils/freight/mock.ts`). Os dados ficam no formato bruto do Melhor Envio e passam pela mesma validação e normalização da integração real. A resposta traz `simulated: true`, e o server registra um aviso no log. Fora de `pnpm dev` (`import.meta.dev`), esse modo responde 503. Uma falha da API real nunca troca para o mock. Quando `NUXT_FREIGHT_API_MODE` não é definido, o modo é `mock` em `pnpm dev` e `melhor-envio` no build de produção. Para usar a API real em desenvolvimento, o modo `melhor-envio` precisa ser escolhido explicitamente.
+- **Alternativas:** fallback automático para o mock quando a API falha; usar o MSW no navegador como mock de desenvolvimento; mock decidido pela ausência do token.
+- **Motivo:** quem clona o projeto (inclusive na avaliação) roda `pnpm dev` e vê o fluxo funcionando, sem criar conta nem token. O padrão depende só do ambiente, nunca da presença do token ou de uma falha da API, e é visível (flag na resposta e aviso no log). Por isso não mascara erro nem configuração esquecida: em produção, sem token, a resposta continua sendo 503. Reaproveitar a normalização garante que o mock respeite o mesmo contrato. O MSW fica restrito aos testes (ver 024).
+
+## 023. Contrato interno e normalização da resposta
+
+- **Contexto:** a resposta do Melhor Envio traz preços como string, valores originais e customizados, pacotes e serviços adicionais. Além disso, na prática, devolve itens `{ id, name, error }` para serviços indisponíveis, o que não está na doc oficial.
+- **Decisão:** `shared/types/freight.ts` define `FreightQuoteResponse { options, simulated }`, em que `FreightOption` é uma união discriminada por `disabled`. Um serviço disponível traz `priceBrl`, `deliveryDays` e `deliveryRange`, a partir de `custom_price`, `custom_delivery_time` e `custom_delivery_range`, conforme a recomendação da doc. Um serviço indisponível traz `disabledReason` com a mensagem da API e continua na lista. A resposta externa é validada com zod no server, e resposta fora do contrato vira 502. Os erros da API viram status e mensagens próprios: 422 → 422; 401/403, 5xx e rede → 502 (o 401 também gera um log de token inválido); tempo acima de 10 s → 504. Nenhuma mensagem da API externa é repassada, exceto o motivo de indisponibilidade.
+- **Alternativas:** repassar a resposta bruta; descartar os serviços indisponíveis; validar só o que a doc descreve e tratar o item com `error` como resposta inválida.
+- **Motivo:** a UI fica desacoplada do provedor e recebe números prontos para formatar. Mostrar os indisponíveis desabilitados, com o motivo, explica por que uma transportadora não aparece com preço. O item com `error` foi aceito no schema por ser o comportamento observado da API real; se o formato mudar, a validação acusa 502 em vez de exibir dado errado. Confirmado no Sandbox em 2026-10-06: pacotes acima do limite e CEP inexistente voltam com status 200, e cada serviço vem como `{ id, name, error, company }`, sem preço. Por exemplo: "Dimensões do objeto ultrapassam o limite da transportadora." e "Serviço indisponível no momento (-2).".
+
+## 024. MSW para a API externa; registerEndpoint para a rota interna
+
+- **Contexto:** os testes precisam cobrir a integração sem rede, e o MSW (decisão 007) intercepta o `fetch` global. No ambiente `nuxt` do Vitest, o `$fetch` de caminhos relativos vai para um app h3 interno do `@nuxt/test-utils`, não para o `fetch` global.
+- **Decisão:** os handlers do Melhor Envio (`tests/mocks/melhor-envio.ts`) cobrem sucesso, serviço indisponível, lista vazia, 422, 401, 500, falha de rede, resposta fora do contrato, resposta que não é JSON e lentidão. O handler de sucesso é o padrão. Os testes do núcleo do server rodam no projeto `unit`, com o MSW interceptando a chamada externa. O composable é testado no projeto `component`, e a rota interna é simulada com `registerEndpoint`. O projeto `component` ganha `hookTimeout` de 60 s.
+- **Alternativas:** subir o servidor Nitro nos testes (`@nuxt/test-utils/e2e`), mas o MSW no processo de teste não intercepta o processo do server; mockar o `$fetch` com `vi.mock`.
+- **Motivo:** cada camada é testada na fronteira real que ela atravessa: o server até o Melhor Envio, o composable até a rota interna. O `registerEndpoint` é o mecanismo oficial do Nuxt para isso. O timeout maior é necessário porque o setup do Nuxt transforma o app inteiro no `beforeAll`, e a frio isso passa dos 10 s padrão, mesmo num teste vazio.
+
+## 025. useFreightQuote com useQuery por parâmetros
+
+- **Contexto:** a cotação é uma leitura determinada pelos dados do formulário, que ficarão na URL (decisão 004).
+- **Decisão:** `useFreightQuote(request)` usa `useQuery` com a chave `['freight-quote', request]`, desabilitado enquanto `request` é `null`, e expõe os estados do Vue Query mais um `errorMessage` pronto para exibir. Só falhas transitórias (rede, 5xx) são repetidas, uma vez; erros 4xx não são repetidos. A leitura do erro do `$fetch` fica em `app/utils/freight-errors.ts`.
+- **Alternativas:** `useMutation` disparado no envio; `useFetch` do Nuxt.
+- **Motivo:** a mesma cotação reaproveita o cache e é refeita a partir da URL (reload, link compartilhado) sem código extra. Repetir um 422 só atrasaria a mensagem, porque o resultado não muda.

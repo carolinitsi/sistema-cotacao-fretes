@@ -25,7 +25,9 @@ export default defineConfig({
           name: 'component',
           include: ['tests/component/**/*.{test,spec}.ts'],
           environment: 'nuxt',
-          setupFiles: ['tests/mocks/setup.ts']
+          setupFiles: ['tests/mocks/setup.ts'],
+          // O setup do Nuxt transforma o app inteiro no beforeAll; a frio passa dos 10 s padrão.
+          hookTimeout: 60_000
         }
       })
     ]
