@@ -30,7 +30,7 @@ Decisões técnicas relevantes e seus trade-offs. Cada entrada segue o formato:
 ## 003. zod para validação
 
 - **Contexto:** a mesma regra de validação deve valer no formulário e na API.
-- **Decisão:** schemas zod em `app/schemas` como fonte única da verdade, inferindo os tipos TypeScript a partir deles.
+- **Decisão:** schemas zod como fonte única da verdade, inferindo os tipos TypeScript a partir deles. Ficam em `shared/schemas` (ver 017).
 - **Alternativas:** Valibot; Yup; validação manual.
 - **Motivo:** é aceito diretamente pelo `UForm` do Nuxt UI, tem inferência de tipos e roda no cliente e no servidor.
 
@@ -131,3 +131,31 @@ Decisões técnicas relevantes e seus trade-offs. Cada entrada segue o formato:
 - **Decisão:** passar `pt_br` (`@nuxt/ui/locale`) para o `UApp` em `app/app.vue`.
 - **Alternativas:** sobrescrever o `aria-label` de cada componente.
 - **Motivo:** leitores de tela anunciam os controles no idioma da página, e isso vale para todos os componentes de uma vez.
+
+## 017. Schemas em `shared/`
+
+- **Contexto:** o schema zod da cotação é usado pelo formulário (app) e pela API mock (server). A pasta prevista, `app/schemas`, pertence ao app Vue. No Nuxt 4, o server não deve importar código de `app/`.
+- **Decisão:** os schemas ficam em `shared/schemas`, a convenção do Nuxt 4 para código comum ao app e ao server, e são importados explicitamente por `#shared/schemas/...`. O projeto `unit` do Vitest ganha o alias `#shared`. Máscaras e formatadores continuam em `app/utils`, porque só o app os usa.
+- **Alternativas:** manter em `app/schemas` e importar no server pelo caminho da raiz; `shared/utils`, que tem auto-import.
+- **Motivo:** segue a estrutura que o próprio Nuxt gera e verifica (o `tsconfig.shared.json` e a proteção de imports impedem `shared/` de depender de `app/` ou `server/`). O import explícito deixa claro de onde vem o schema, sem misturar schemas com utils auto-importadas.
+
+## 018. Schema valida valores normalizados; máscara só no input
+
+- **Contexto:** o formulário mostra CEP, medidas, peso e seguro com máscaras pt-BR ("01310-100", "12,5", "1.234,56"). O mesmo schema precisa validar o formulário, a API e a query string.
+- **Decisão:** o `quoteRequestSchema` valida valores normalizados (CEP só com dígitos e números). As máscaras (`app/utils/masks.ts`) são objetos `InputMask` com `mask`, `parse` e `format`, e o `UiMaskedInput` (wrapper do `UInput`) exibe o texto mascarado e expõe no v-model o valor normalizado. A moeda é preenchida da direita para a esquerda, como em caixa eletrônico, então o sinal de menos não pode ser digitado. A regra de seguro negativo continua no schema para a API e para a URL. Limitação aceita: quando a máscara reescreve o texto (inclusão do hífen, reformatação da moeda), o cursor vai para o fim do campo, mesmo quando a edição foi no meio do texto. Os campos são curtos, e preservar a posição exigiria mapear o cursor entre o texto digitado e o mascarado para cada máscara.
+- **Alternativas:** `UInputNumber` do Nuxt UI, que já formata pt-BR e moeda; schema validando o texto mascarado com `transform`; biblioteca de máscara (maska, vue-the-mask).
+- **Motivo:** o `UInputNumber` não tem ícone à esquerda, que o design usa em todos os campos, e ajusta "0" e negativos para o `min` ao sair do campo, escondendo os erros que o design mostra. Validar o texto mascarado exigiria um schema para o formulário e outro para a API. As máscaras são funções puras de poucas linhas, testadas em Node, sem dependência nova.
+
+## 019. Limites dos campos da cotação
+
+- **Contexto:** o design só define os mínimos (medidas e peso maiores que 0, seguro não negativo).
+- **Decisão:** medidas até 200 cm com 1 casa decimal; peso até 1000 kg com 3 casas (gramas); seguro até R$ 1.000.000,00 com 2 casas. Ficam em `QUOTE_LIMITS`, no schema. Origem igual ao destino é permitido. A mensagem de CEP do design ("O CEP inválido") foi corrigida para "CEP inválido. Use o formato 00000-000."
+- **Alternativas:** sem máximo; limites de uma transportadora específica.
+- **Motivo:** evita valores absurdos e erros de digitação (um zero a mais) sem restringir casos reais de encomenda. Entrega na mesma cidade é um caso comum. Os valores ficam num só lugar, fáceis de ajustar quando houver regra de negócio.
+
+## 020. Botão "Calcular frete" sempre habilitado
+
+- **Contexto:** no design, o botão aparece desabilitado enquanto há erros no formulário.
+- **Decisão:** o botão fica habilitado e a validação roda no envio, com foco no primeiro campo inválido. Ele só fica desabilitado (com loading) enquanto a cotação é calculada. O ícone do seguro passa a ser `i-lucide-banknote`, porque o pin de mapa do design repete o ícone dos CEPs.
+- **Alternativas:** seguir o design e desabilitar o botão até o formulário ficar válido.
+- **Motivo:** um botão desabilitado não recebe foco nem explica por que não funciona. Quem usa teclado ou leitor de tela não descobre o que falta. Validar no envio mostra as mensagens de todos os campos de uma vez.

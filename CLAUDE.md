@@ -15,8 +15,8 @@ Antes de finalizar qualquer tarefa, rode lint, typecheck e test.
 
 ## Regras de código
 - Sempre `<script setup lang="ts">`. Sem `any`; use `unknown` e estreite o tipo.
-- Lógica de negócio e validação fora dos componentes: em `app/utils`, `app/schemas` e `app/composables`.
-- Um schema zod é a fonte da verdade da validação (formulário e server usam o mesmo).
+- Lógica de negócio e validação fora dos componentes: em `app/utils`, `shared/schemas` e `app/composables`.
+- Um schema zod em `shared/schemas` é a fonte da verdade da validação (formulário e server usam o mesmo, via `#shared/...`).
 - Chamadas de API só via composables com Vue Query; componentes não chamam `$fetch` diretamente.
 - Estado compartilhável de tela vive na URL (query string). Sem Pinia.
 - Prefira componentes do Nuxt UI antes de criar os seus. Estilo via Tailwind e tokens do tema, sem CSS solto nem cores fixas.
