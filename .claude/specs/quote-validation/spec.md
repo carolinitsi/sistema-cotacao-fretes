@@ -45,3 +45,8 @@ seguro), pronta para o formulário e para a API mock. Sem montar o formulário n
 
 ## Fora de escopo
 Formulário da página, server route `/api/quotes`, estado na URL, busca de endereço por CEP.
+
+## Notas para a server route (da revisão de segurança)
+- Validar com `readValidatedBody(event, quoteRequestSchema.parse)` e usar só o dado validado, nunca o body bruto.
+- Responder 400 sem ecoar o input; definir limite de tamanho do body.
+- Valores da query string chegam como texto: converter na borda (texto vazio → `undefined`), sem `z.coerce` no schema.
