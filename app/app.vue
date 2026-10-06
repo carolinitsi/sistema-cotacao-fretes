@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { pt_br } from '@nuxt/ui/locale'
+
 const { appName } = useRuntimeConfig().public
 
 useHead({
@@ -9,9 +11,9 @@ useHead({
 </script>
 
 <template>
-  <UApp>
-    <UMain>
+  <UApp :locale="pt_br">
+    <NuxtLayout>
       <NuxtPage />
-    </UMain>
+    </NuxtLayout>
   </UApp>
 </template>

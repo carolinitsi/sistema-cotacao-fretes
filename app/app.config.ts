@@ -86,6 +86,66 @@ export default defineAppConfig({
       slots: {
         root: 'rounded-card shadow-subtle'
       }
+    },
+
+    // Item ativo como "selecionado" do design. O padrão (text-primary) teria
+    // amarelo sobre branco, 1,73:1.
+    navigationMenu: {
+      slots: {
+        link: 'text-body focus-visible:before:outline-focus'
+      },
+      variants: {
+        orientation: {
+          vertical: { link: 'px-3 py-2' }
+        }
+      },
+      compoundVariants: [
+        {
+          color: 'primary',
+          variant: 'pill',
+          active: true,
+          class: {
+            link: 'text-selected-a11y before:bg-surface-selected',
+            linkLeadingIcon: 'text-selected-a11y group-data-[state=open]:text-selected-a11y'
+          }
+        }
+      ]
+    },
+
+    // Como no design: todos os itens em text-body regular e cinza; o atual se
+    // distingue por não ser link e por aria-current. O padrão (semibold e
+    // text-highlighted no atual, ícone de 20px) destoava do layout.
+    breadcrumb: {
+      slots: {
+        link: 'text-body focus-visible:outline-focus',
+        separatorIcon: 'size-icon'
+      },
+      variants: {
+        active: {
+          true: { link: 'font-normal' },
+          false: { link: 'font-normal' }
+        }
+      },
+      compoundVariants: [
+        {
+          color: 'neutral',
+          active: true,
+          class: { link: 'text-muted' }
+        }
+      ]
+    },
+
+    pageHeader: {
+      slots: {
+        root: 'border-none py-0',
+        title: 'text-title sm:text-title',
+        description: 'text-body'
+      },
+      variants: {
+        title: {
+          true: { description: 'mt-1' }
+        }
+      }
     }
   }
 })
