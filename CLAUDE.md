@@ -21,10 +21,12 @@ Antes de finalizar qualquer tarefa, rode lint, typecheck e test.
 - Estado compartilhável de tela vive na URL (query string). Sem Pinia.
 - Prefira componentes do Nuxt UI antes de criar os seus. Estilo via Tailwind e tokens do tema, sem CSS solto nem cores fixas.
 - Tratar sempre os estados de loading, erro e vazio.
+- Use tokens semânticos (`--fp-*`) e classes do tema; sem hex ou px soltos nos componentes. Ver `docs/design-tokens.md`.
 
 ## Acessibilidade
 - Inputs com label e `aria-describedby` nos erros; `aria-invalid` quando inválido.
 - Navegação por teclado funcional e foco visível. Não depender só de cor para indicar erro.
+- Para texto, usar as variantes a11y quando disponíveis.
 
 ## Testes
 - Teste regras de negócio e comportamento, não detalhes de implementação nem a lib.
