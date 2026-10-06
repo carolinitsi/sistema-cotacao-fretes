@@ -1,11 +1,7 @@
 <script setup lang="ts">
-useSeoMeta({ title: 'Cotação de fretes' })
+definePageMeta({ redirect: '/inicio' })
 </script>
 
 <template>
-  <UContainer class="py-16">
-    <h1 class="text-2xl font-semibold text-highlighted">
-      Cotação de fretes
-    </h1>
-  </UContainer>
+  <div />
 </template>

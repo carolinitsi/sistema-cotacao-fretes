@@ -1,8 +1,9 @@
 import { expect, test } from '@playwright/test'
 
-test('abre a página inicial', async ({ page }) => {
+test('a raiz redireciona para Início', async ({ page }) => {
   await page.goto('/')
 
-  await expect(page).toHaveTitle('Cotação de fretes · FretePro')
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Cotação de fretes')
+  await expect(page).toHaveURL('/inicio')
+  await expect(page).toHaveTitle('Início · FretePro')
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Início')
 })
