@@ -29,8 +29,26 @@ cp .env.example .env
 | Variável | Descrição | Padrão |
 |----------|-----------|--------|
 | `NUXT_PUBLIC_APP_NAME` | Nome exibido no título das páginas | `FretePro` |
+| `NUXT_FREIGHT_API_MODE` | `melhor-envio` (API real) ou `mock` (dados simulados, só em `pnpm dev`) | `mock` em `pnpm dev`, `melhor-envio` no build |
+| `NUXT_MELHOR_ENVIO_BASE_URL` | URL base da API do Melhor Envio | Sandbox |
+| `NUXT_MELHOR_ENVIO_TOKEN` | Access token com o escopo `shipping-calculate` | vazio |
+| `NUXT_MELHOR_ENVIO_USER_AGENT` | `Nome (email de contato)`, exigido pela API | vazio |
 
-Todas são opcionais: sem `.env` o app usa os valores padrão do `nuxt.config.ts`.
+Sem `.env`, o `pnpm dev` já funciona com dados simulados. No build de produção sem token, a cotação
+responde 503 ("Cotação de frete não configurada"): o mock nunca é usado como fallback silencioso.
+
+### Cotação de frete
+
+A cotação passa sempre pela rota interna `POST /api/freight/quote`. Token e chamadas ao
+Melhor Envio ficam só no server.
+
+- **Sem credenciais:** é o padrão do `pnpm dev` (ou `NUXT_FREIGHT_API_MODE=mock`). A rota devolve dados
+  estáticos com `simulated: true` e registra um aviso no log. Fora de `pnpm dev` esse modo responde 503.
+- **Sandbox do Melhor Envio:** crie uma conta em https://sandbox.melhorenvio.com.br, cadastre um aplicativo
+  em Integrações › Área Dev e gere um access token pelo fluxo OAuth2 com o escopo `shipping-calculate`
+  ([doc](https://docs.melhorenvio.com.br/reference/solicitacao-do-token)). Depois use
+  `NUXT_FREIGHT_API_MODE=melhor-envio`, `NUXT_MELHOR_ENVIO_TOKEN` e `NUXT_MELHOR_ENVIO_USER_AGENT`.
+  O token vale 30 dias e é renovado manualmente.
 
 ## Como rodar
 
@@ -72,11 +90,13 @@ app/
   plugins/                    plugins do Nuxt (Vue Query)
   utils/                      funções puras (formatadores, máscaras)
 shared/schemas/               schemas zod usados pelo app e pelo server (fonte da verdade da validação)
-server/api/                   API mock (server routes do Nitro)
+shared/types/                 contratos compartilhados entre app e server (resposta da cotação)
+server/api/                   rotas internas (Nitro), ex.: /api/freight/quote
+server/utils/freight/         integração Melhor Envio, mock de desenvolvimento e erros da cotação
 tests/
   unit/                       Vitest em ambiente Node (schemas, utils)
   component/                  Vitest em ambiente Nuxt (componentes)
-  mocks/                      handlers e servidor do MSW
+  mocks/                      handlers e servidor do MSW (respostas simuladas do Melhor Envio)
   e2e/                        Playwright
 docs/                         registro de decisões
 ```
