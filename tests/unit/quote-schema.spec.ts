@@ -62,6 +62,10 @@ describe('quoteRequestSchema', () => {
       expect(errorsFor({ widthCm: -1 }).widthCm).toEqual(['A largura deve ser maior que 0.'])
     })
 
+    it('rejeita valores positivos menores que a precisão permitida', () => {
+      expect(errorsFor({ heightCm: 1e-12 }).heightCm).toEqual(['Use no máximo 1 casa decimal.'])
+    })
+
     it('aplica os limites máximos', () => {
       expect(errorsFor({ heightCm: 200, weightKg: 1000 })).toEqual({})
       expect(errorsFor({ heightCm: 200.1, weightKg: 1000.001 })).toEqual({
@@ -94,7 +98,12 @@ describe('quoteRequestSchema', () => {
       expect(errorsFor({ insuranceBrl: 0.005 }).insuranceBrl).toEqual(['Use no máximo 2 casas decimais.'])
     })
 
+    it.each([131072.2, 999999.99, 0.3])('aceita %s sem erro de ponto flutuante', (value) => {
+      expect(errorsFor({ insuranceBrl: value })).toEqual({})
+    })
+
     it('aplica o limite máximo', () => {
+      expect(errorsFor({ insuranceBrl: 1_000_000 })).toEqual({})
       expect(errorsFor({ insuranceBrl: 1_000_000.01 }).insuranceBrl).toEqual(['O valor do seguro deve ser de no máximo R$ 1.000.000,00.'])
     })
   })

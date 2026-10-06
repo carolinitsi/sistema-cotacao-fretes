@@ -7,11 +7,10 @@ export const QUOTE_LIMITS = {
   insuranceBrl: { max: 1_000_000, decimals: 2 }
 } as const
 
-// Tolerância para erros de ponto flutuante (ex.: 0.3 * 10 = 2.9999999999999996).
+// Compara com o valor arredondado nas casas permitidas: exato em qualquer magnitude,
+// ao contrário de uma tolerância fixa sobre value * 10 ** decimals.
 function hasMaxDecimals(value: number, decimals: number): boolean {
-  const scaled = value * 10 ** decimals
-
-  return Math.abs(scaled - Math.round(scaled)) < 1e-9
+  return Number(value.toFixed(decimals)) === value
 }
 
 function decimalsMessage(decimals: number): string {
