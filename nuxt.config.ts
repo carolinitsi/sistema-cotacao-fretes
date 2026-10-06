@@ -17,8 +17,16 @@ export default defineNuxtConfig({
     fallback: 'light'
   },
 
-  // Só o que o cliente precisa; sobrescrito por NUXT_PUBLIC_APP_NAME.
   runtimeConfig: {
+    // Privado: só existe no server. Sobrescrito por NUXT_FREIGHT_API_MODE e NUXT_MELHOR_ENVIO_*
+    // (ver .env.example e docs/DECISIONS.md). Modo vazio: mock em dev, Melhor Envio fora dele.
+    freightApiMode: '',
+    melhorEnvio: {
+      baseUrl: 'https://sandbox.melhorenvio.com.br',
+      token: '',
+      userAgent: ''
+    },
+    // Só o que o cliente precisa; sobrescrito por NUXT_PUBLIC_APP_NAME.
     public: {
       appName: 'FretePro'
     }
