@@ -110,3 +110,24 @@ Decisões técnicas relevantes e seus trade-offs. Cada entrada segue o formato:
 - **Decisão:** `colorMode.preference` e `fallback` fixos em `light` no `nuxt.config.ts`. As variáveis `--ui-*` são sobrescritas só em `:root`.
 - **Alternativas:** manter o modo escuro com os valores padrão do Nuxt UI; desligar o módulo com `ui.colorMode: false`.
 - **Motivo:** evita uma tela escura que mistura tokens do design com cores do Nuxt UI, sem remover o módulo, que pode ser reaproveitado quando houver design escuro.
+
+## 014. Navegação principal e breadcrumb
+
+- **Contexto:** o layout fornecido apresenta "Calcular frete" antes de "Início" na navegação lateral e usa "Início > Calcular frete" no breadcrumb da tela de cálculo.
+- **Decisão:** "Início" e "Calcular frete" são rotas de primeiro nível. A navegação lateral fica com "Início" antes de "Calcular frete", e `/` redireciona para `/inicio`. O breadcrumb reflete a hierarquia real das rotas, sem representar "Calcular frete" como subpágina de "Início". Os labels vêm de um mapeamento único em `app/utils/navigation.ts`, usado pelo menu e pelo breadcrumb.
+- **Alternativas:** reproduzir literalmente a ordem e o breadcrumb do layout; manter "Calcular frete" como primeiro item com "Início > Calcular frete"; ajustar a navegação para refletir a hierarquia real das páginas.
+- **Motivo:** a hierarquia de navegação deve ser consistente com a estrutura das rotas. O breadcrumb não deve sugerir uma relação pai/filho que não existe, e isso evita inconsistência entre a navegação lateral e a estrutura de informação da aplicação.
+
+## 015. Application shell com os componentes Dashboard do Nuxt UI
+
+- **Contexto:** o layout precisa de sidebar, topbar, breadcrumb e área de conteúdo, funcionando também em telas pequenas.
+- **Decisão:** `app/layouts/default.vue` compõe `UDashboardGroup`, `UDashboardSidebar` e `UDashboardPanel`. Abaixo de `lg`, a sidebar vira um slideover aberto pelo botão da topbar (comportamento do próprio Nuxt UI). Os pedaços do shell ficam em `app/components/shell/`. O item ativo do menu usa `text-selected-a11y` sobre `surface-selected`, no lugar do `text-primary` padrão, que é amarelo sobre branco (1,73:1). O breadcrumb segue o layout: todos os itens em `text-body` regular e `text-muted` (4,97:1), separador de 16px. No design, os itens anteriores aparecem um pouco mais claros que o atual; não há token mais claro que passe 4,5:1, então o atual se distingue por não ser link e por `aria-current`, não pela cor.
+- **Alternativas:** layout próprio com Tailwind e `UNavigationMenu`, com o drawer mobile implementado à mão.
+- **Motivo:** segue a regra de preferir componentes do Nuxt UI. Foco, `aria-current`, fechamento do menu ao navegar e slideover acessível já vêm prontos, com menos código para manter.
+
+## 016. Locale pt-BR no Nuxt UI
+
+- **Contexto:** o shell usa textos gerados pelo Nuxt UI, como o rótulo do botão que abre a sidebar, e o locale padrão é inglês ("Open sidebar") numa página `lang="pt-BR"`.
+- **Decisão:** passar `pt_br` (`@nuxt/ui/locale`) para o `UApp` em `app/app.vue`.
+- **Alternativas:** sobrescrever o `aria-label` de cada componente.
+- **Motivo:** leitores de tela anunciam os controles no idioma da página, e isso vale para todos os componentes de uma vez.
