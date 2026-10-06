@@ -1,18 +1,96 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
+@import "./tokens.css";
 
+/*
+ * Tema do Tailwind e do Nuxt UI a partir dos tokens --fp-* (tokens.css).
+ * Aqui não entram valores novos, só referências; a exceção é --font-sans.
+ */
+
+/* Paleta brand para ui.colors.primary. O Nuxt UI exige a escala 50–950 em
+ * @theme static. Origem de cada tom (design ou derivado) em tokens.css. */
 @theme static {
-  --font-sans: 'Public Sans', sans-serif;
+  --color-brand-50: var(--fp-brand-50);
+  --color-brand-100: var(--fp-brand-100);
+  --color-brand-200: var(--fp-brand-200);
+  --color-brand-300: var(--fp-brand-300);
+  --color-brand-400: var(--fp-brand-400);
+  --color-brand-500: var(--fp-brand-500);
+  --color-brand-600: var(--fp-brand-600);
+  --color-brand-700: var(--fp-brand-700);
+  --color-brand-800: var(--fp-brand-800);
+  --color-brand-900: var(--fp-brand-900);
+  --color-brand-950: var(--fp-brand-950);
 
-  --color-green-50: #EFFDF5;
-  --color-green-100: #D9FBE8;
-  --color-green-200: #B3F5D1;
-  --color-green-300: #75EDAE;
-  --color-green-400: #00DC82;
-  --color-green-500: #00C16A;
-  --color-green-600: #00A155;
-  --color-green-700: #007F45;
-  --color-green-800: #016538;
-  --color-green-900: #0A5331;
-  --color-green-950: #052E16;
+  /* O @nuxt/fonts procura o nome da família no CSS gerado, então "Inter"
+   * precisa aparecer literal aqui (repete --fp-font-family; o teste confere). */
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Utilities ligadas aos tokens: rounded-control, shadow-subtle, text-title,
+ * h-control, bg-page, text-selected-a11y, outline-focus etc.
+ * Espaçamento usa a escala padrão do Tailwind (ver docs/design-tokens.md). */
+@theme inline {
+  --color-page: var(--fp-bg-page);
+  --color-surface: var(--fp-surface-default);
+  --color-surface-subtle: var(--fp-surface-subtle);
+  --color-surface-selected: var(--fp-surface-selected);
+  --color-surface-error: var(--fp-surface-error);
+  --color-disabled: var(--fp-action-disabled);
+  --color-on-disabled: var(--fp-text-on-disabled);
+  --color-selected-a11y: var(--fp-text-selected-a11y);
+  --color-error-a11y: var(--fp-text-error-a11y);
+  --color-error-border: var(--fp-border-error);
+  --color-error-halo: var(--fp-icon-error-halo);
+  --color-focus: var(--fp-focus-ring);
+
+  --radius-control: var(--fp-radius-control);
+  --radius-card: var(--fp-radius-card);
+
+  --shadow-subtle: var(--fp-shadow-subtle);
+
+  --height-control: var(--fp-size-control-height);
+  --size-icon: var(--fp-size-icon);
+
+  --font-weight-button: var(--fp-font-button-weight);
+
+  --text-title: var(--fp-font-title-size);
+  --text-title--line-height: var(--fp-font-title-line-height);
+  --text-title--font-weight: var(--fp-font-title-weight);
+  --text-section: var(--fp-font-section-size);
+  --text-section--line-height: var(--fp-font-section-line-height);
+  --text-section--font-weight: var(--fp-font-section-weight);
+  --text-body: var(--fp-font-body-size);
+  --text-body--line-height: var(--fp-font-body-line-height);
+  --text-body--font-weight: var(--fp-font-body-weight);
+  --text-label: var(--fp-font-label-size);
+  --text-label--line-height: var(--fp-font-label-line-height);
+  --text-label--font-weight: var(--fp-font-label-weight);
+  --text-caption: var(--fp-font-caption-size);
+  --text-caption--line-height: var(--fp-font-caption-line-height);
+  --text-caption--font-weight: var(--fp-font-caption-weight);
+}
+
+/* Variáveis de tema do Nuxt UI apontando para os tokens semânticos.
+ * Só modo claro: o color mode está fixo em light (nuxt.config.ts). */
+:root {
+  --ui-bg: var(--fp-surface-default);
+  --ui-bg-muted: var(--fp-bg-page);
+  --ui-bg-elevated: var(--fp-surface-subtle);
+
+  --ui-border: var(--fp-border-default);
+  --ui-border-muted: var(--fp-border-default);
+  --ui-border-accented: var(--fp-border-default);
+
+  --ui-text: var(--fp-text-primary);
+  --ui-text-highlighted: var(--fp-text-primary);
+  --ui-text-muted: var(--fp-text-secondary-a11y);
+
+  --ui-error: var(--fp-feedback-error);
+}
+
+@layer base {
+  body {
+    @apply bg-page;
+  }
 }

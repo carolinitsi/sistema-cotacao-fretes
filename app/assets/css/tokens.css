@@ -1,0 +1,143 @@
+/*
+ * Design tokens do FretePro.
+ *
+ * Fonte: docs/design/tokens/*.tokens.json (export do Figma, não editar).
+ * Status: proposta extraída de imagens. Validar no original.
+ *
+ * Fluxo: JSON do Figma → --fp-* (este arquivo) → @theme / --ui-* (main.css) → componentes.
+ * Nomes: caminho do token com "-" e camelCase em kebab-case
+ *   (text.onDisabled → --fp-text-on-disabled; type.* vira --fp-font-*).
+ * tests/unit/design-tokens.test.ts falha se este arquivo divergir dos JSONs.
+ */
+
+:root {
+  /* ---------------------------------------------------------------------
+   * 1. Primitivos — primitives.tokens.json
+   * ------------------------------------------------------------------- */
+  --fp-yellow-50: #FDF4DD;
+  --fp-yellow-500: #FABB02;
+  --fp-amber-700: #B97800;
+  --fp-neutral-0: #FFFFFF;
+  --fp-neutral-50: #F5F7F9;
+  --fp-neutral-100: #F1F5F9;
+  --fp-neutral-200: #E2E8F0;
+  --fp-neutral-400: #B8C2CF;
+  --fp-neutral-500: #64748B;
+  --fp-neutral-900: #0F172A;
+  --fp-red-50: #FFF3F4;
+  --fp-red-500: #FF3B45;
+
+  /* ---------------------------------------------------------------------
+   * 2. Semânticos — semantic.tokens.json (aliases dos primitivos)
+   * ------------------------------------------------------------------- */
+  --fp-brand: var(--fp-yellow-500);
+  --fp-action-primary: var(--fp-yellow-500);
+  --fp-action-disabled: var(--fp-neutral-400);
+  --fp-bg-page: var(--fp-neutral-50);
+  --fp-surface-default: var(--fp-neutral-0);
+  --fp-surface-subtle: var(--fp-neutral-100);
+  --fp-surface-selected: var(--fp-yellow-50);
+  --fp-surface-error: var(--fp-red-50);
+  --fp-text-primary: var(--fp-neutral-900);
+  --fp-text-secondary: var(--fp-neutral-500);
+  --fp-text-selected: var(--fp-amber-700);
+  --fp-text-on-disabled: var(--fp-neutral-0);
+  --fp-border-default: var(--fp-neutral-200);
+  --fp-feedback-error: var(--fp-red-500);
+
+  /* ---------------------------------------------------------------------
+   * 3. Fundamentos — foundations.tokens.json
+   * Medidas em px no Figma; tamanhos convertidos para rem (16px = 1rem)
+   * para respeitar a fonte configurada pelo usuário.
+   * ------------------------------------------------------------------- */
+  --fp-space-8: 0.5rem; /* 8px */
+  --fp-space-12: 0.75rem; /* 12px */
+  --fp-space-16: 1rem; /* 16px */
+  --fp-space-24: 1.5rem; /* 24px */
+
+  --fp-radius-control: 0.375rem; /* 6px */
+  --fp-radius-card: 0.5rem; /* 8px */
+
+  --fp-border-width-default: 1px;
+  --fp-border-style-default: solid;
+
+  --fp-font-family: 'Inter';
+  --fp-font-title-size: 1.5rem; /* 24px */
+  --fp-font-title-weight: 700;
+  --fp-font-title-line-height: 2rem; /* 32px */
+  --fp-font-section-size: 1rem; /* 16px */
+  --fp-font-section-weight: 600;
+  --fp-font-section-line-height: 1.5rem; /* 24px */
+  --fp-font-body-size: 0.875rem; /* 14px */
+  --fp-font-body-weight: 400;
+  --fp-font-body-line-height: 1.25rem; /* 20px */
+  --fp-font-label-size: 0.875rem; /* 14px */
+  --fp-font-label-weight: 500;
+  --fp-font-label-line-height: 1.25rem; /* 20px */
+  --fp-font-caption-size: 0.75rem; /* 12px */
+  --fp-font-caption-weight: 400;
+  --fp-font-caption-line-height: 1rem; /* 16px */
+  --fp-font-button-weight: 600;
+
+  --fp-size-icon: 1rem; /* 16px */
+  --fp-size-control-height: 2.5rem; /* 40px */
+
+  --fp-shadow-none: none;
+  --fp-shadow-subtle-x: 0px;
+  --fp-shadow-subtle-y: 2px;
+  --fp-shadow-subtle-blur: 8px;
+  --fp-shadow-subtle-spread: 0px;
+  --fp-shadow-subtle-color: #0F172A08; /* #0F172A com alpha 8/255 ≈ 3,1% */
+  /* Composição dos valores acima (sem valor novo). */
+  --fp-shadow-subtle: var(--fp-shadow-subtle-x) var(--fp-shadow-subtle-y) var(--fp-shadow-subtle-blur) var(--fp-shadow-subtle-spread) var(--fp-shadow-subtle-color);
+}
+
+:root {
+  /* =====================================================================
+   * DERIVADO — não vem do design
+   * Valores calculados a partir dos tokens acima. Ver docs/design-tokens.md.
+   * Conversão sRGB ↔ OKLCH (Ottosson); contraste WCAG 2.x (app/utils/contrast.ts).
+   * =================================================================== */
+
+  /* Escala brand (consumida pelo @theme em main.css).
+   * Âncoras do design: 50 = yellow/50, 500 = yellow/500, 700 = amber/700.
+   * 100–400: interpolação linear de L, C e H em OKLCH entre 50 e 500 (passos de 1/5).
+   * 600: ponto médio em OKLCH entre 500 e 700.
+   * 800, 900, 950: extrapolação a partir de 700 com o mesmo ΔL por passo de 500→600
+   * (0,1008; 950 = meio passo), H fixo do 700 e C proporcional a L.
+   * Todos dentro do gamut sRGB; L decresce monotonicamente de 50 a 950. */
+  --fp-brand-50: var(--fp-yellow-50);
+  --fp-brand-100: #FCEABF; /* L 0,941 C 0,059 H 88,0 */
+  --fp-brand-200: #FBDF9F; /* L 0,912 C 0,087 H 87,0 */
+  --fp-brand-300: #FAD47D; /* L 0,884 C 0,114 H 86,5 */
+  --fp-brand-400: #FAC855; /* L 0,856 C 0,142 H 85,2 */
+  --fp-brand-500: var(--fp-yellow-500);
+  --fp-brand-600: #DA9801; /* L 0,726 C 0,151 H 77,6 */
+  --fp-brand-700: var(--fp-amber-700);
+  --fp-brand-800: #925E00; /* L 0,526 C 0,113 H 72,0 */
+  --fp-brand-900: #6C4400; /* L 0,423 C 0,091 H 71,6 */
+  --fp-brand-950: #5A3800; /* L 0,372 C 0,080 H 71,7 */
+
+  /* Variantes de texto acessíveis (≥ 4,5:1).
+   * Método: mesmo H e C em OKLCH; L reduzido em passos de 0,0005 até o
+   * primeiro valor que atinge 4,5:1 em todos os fundos indicados. */
+  /* text/secondary: 4,43:1 em bg/page → 4,63:1 (ΔL −0,009). Seguro também em
+   * surface/default (4,97:1) e surface/subtle (4,54:1). */
+  --fp-text-secondary-a11y: #617188;
+  /* text/selected sobre surface/selected: 3,33:1 → 4,52:1 (ΔL −0,075). */
+  --fp-text-selected-a11y: #9C6400;
+  /* feedback/error sobre surface/error: 3,25:1 → 4,52:1 (ΔL −0,080). 4,90:1 em branco. */
+  --fp-text-error-a11y: #E10B2C;
+
+  /* Anel de foco (≥ 3:1, WCAG 1.4.11). yellow/500 tem só 1,73:1 em branco.
+   * amber/700 já atinge 3,65:1 em branco, 3,40:1 em bg/page e 3,33:1 em
+   * surface/selected, então é reaproveitado sem criar cor nova. */
+  --fp-focus-ring: var(--fp-amber-700);
+
+  /* Erro.
+   * Borda: red/500, 3,52:1 em branco e 3,25:1 em surface/error (≥ 3:1 para
+   * componentes de interface). Halo do ícone: 20% do caminho de red/50 até
+   * red/500 em OKLCH (decorativo, sem exigência de contraste). */
+  --fp-border-error: var(--fp-red-500);
+  --fp-icon-error-halo: #FFD6D8; /* L 0,911 C 0,046 H 14,7 */
+}

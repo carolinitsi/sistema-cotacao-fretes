@@ -11,6 +11,12 @@ export default defineNuxtConfig({
 
   css: ['~/assets/css/main.css'],
 
+  // Os tokens do design só têm modo claro (ver docs/DECISIONS.md).
+  colorMode: {
+    preference: 'light',
+    fallback: 'light'
+  },
+
   // Só o que o cliente precisa; sobrescrito por NUXT_PUBLIC_APP_NAME.
   runtimeConfig: {
     public: {
