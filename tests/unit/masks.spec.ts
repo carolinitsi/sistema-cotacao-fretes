@@ -62,6 +62,13 @@ describe('decimalMask', () => {
     expect(weight.mask('1,25678')).toBe('1,256')
     expect(weight.format(1000)).toBe('1000')
   })
+
+  it('trata o ponto como milhar quando o texto colado já tem vírgula', () => {
+    const weight = decimalMask({ decimals: 3, maxIntegerDigits: 4 })
+
+    expect(weight.mask('1.250,5')).toBe('1250,5')
+    expect(weight.mask('1,2,3')).toBe('1,2')
+  })
 })
 
 describe('currencyMask', () => {

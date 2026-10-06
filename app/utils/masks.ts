@@ -20,21 +20,23 @@ export const cepMask: InputMask<string> = {
   format: value => formatCep(onlyDigits(value).slice(0, 8))
 }
 
-// Decimal pt-BR sem sinal e sem separador de milhar: "12,5". O ponto vira vírgula.
+// Decimal pt-BR sem sinal e sem separador de milhar: "12,5". Sem vírgula no texto, o ponto
+// vira vírgula ("12.5"); com vírgula, o ponto é separador de milhar colado ("1.250,5").
 export function decimalMask(options: { decimals: number, maxIntegerDigits: number }): InputMask<number | undefined> {
   const { decimals, maxIntegerDigits } = options
   const formatter = new Intl.NumberFormat('pt-BR', { maximumFractionDigits: decimals, useGrouping: false })
 
   return {
     mask: (text) => {
-      const [integer = '', ...rest] = text.replace(/\./g, ',').replace(/[^\d,]/g, '').split(',')
+      const normalized = text.includes(',') ? text.replace(/\./g, '') : text.replace(/\./g, ',')
+      const [integer = '', fraction] = normalized.replace(/[^\d,]/g, '').split(',')
       const integerPart = integer.replace(/^0+(?=\d)/, '').slice(0, maxIntegerDigits)
 
-      if (rest.length === 0 || decimals === 0) {
+      if (fraction === undefined || decimals === 0) {
         return integerPart
       }
 
-      return `${integerPart || '0'},${rest.join('').slice(0, decimals)}`
+      return `${integerPart || '0'},${fraction.slice(0, decimals)}`
     },
     parse: masked => (masked === '' ? undefined : Number(masked.replace(',', '.'))),
     format: value => (value === undefined ? '' : formatter.format(value))
