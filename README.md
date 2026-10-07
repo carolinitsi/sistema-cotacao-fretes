@@ -1,111 +1,138 @@
 # Sistema de cotação de fretes
 
-Sistema de cotação de fretes desenvolvido como teste técnico para a vaga de Front-end Pleno (Vue/Nuxt).
+Teste técnico para a vaga de Front-end Pleno (Vue/Nuxt).
 
 Stack: Nuxt 4, Vue 3, TypeScript estrito, Nuxt UI + Tailwind CSS 4, TanStack Vue Query, zod,
 Vitest, MSW e Playwright.
 
-## Requisitos
-
-- Node.js 22.19 ou superior (ou 24.11+), versão em [`.nvmrc`](.nvmrc); com nvm: `nvm use`.
-  Versões mais antigas (como Node 20) fazem o `nuxt prepare` falhar, por isso o `pnpm install` as recusa.
-- pnpm (versão fixada em `packageManager` no `package.json`; com Corepack: `corepack enable`)
-
-## Instalação
-
-```bash
-pnpm install
-```
-
-O `postinstall` roda `nuxt prepare`, que gera os tipos e a config do ESLint em `.nuxt/`.
-
-## Variáveis de ambiente
-
-Copie o exemplo e ajuste se necessário:
-
-```bash
-cp .env.example .env
-```
-
-| Variável | Descrição | Padrão |
-|----------|-----------|--------|
-| `NUXT_PUBLIC_APP_NAME` | Nome exibido no título das páginas | `FretePro` |
-| `NUXT_FREIGHT_API_MODE` | `melhor-envio` (API real) ou `mock` (dados simulados, só em `pnpm dev`) | `mock` em `pnpm dev`, `melhor-envio` no build |
-| `NUXT_MELHOR_ENVIO_BASE_URL` | URL base da API do Melhor Envio | Sandbox |
-| `NUXT_MELHOR_ENVIO_TOKEN` | Access token com o escopo `shipping-calculate` | vazio |
-| `NUXT_MELHOR_ENVIO_USER_AGENT` | `Nome (email de contato)`, exigido pela API | vazio |
-
-Sem `.env`, o `pnpm dev` já funciona com dados simulados. No build de produção sem token, a cotação
-responde 503 ("Cotação de frete não configurada"): o mock nunca é usado como fallback silencioso.
-
-### Cotação de frete
-
-A cotação passa sempre pela rota interna `POST /api/freight/quote`. Token e chamadas ao
-Melhor Envio ficam só no server.
-
-- **Sem credenciais:** é o padrão do `pnpm dev` (ou `NUXT_FREIGHT_API_MODE=mock`). A rota devolve dados
-  estáticos com `simulated: true` e registra um aviso no log. Fora de `pnpm dev` esse modo responde 503.
-- **Sandbox do Melhor Envio:** crie uma conta em https://sandbox.melhorenvio.com.br, cadastre um aplicativo
-  em Integrações › Área Dev e gere um access token pelo fluxo OAuth2 com o escopo `shipping-calculate`
-  ([doc](https://docs.melhorenvio.com.br/reference/solicitacao-do-token)). Depois use
-  `NUXT_FREIGHT_API_MODE=melhor-envio`, `NUXT_MELHOR_ENVIO_TOKEN` e `NUXT_MELHOR_ENVIO_USER_AGENT`.
-  O token vale 30 dias e é renovado manualmente.
+**Versão publicada:** https://sistema-cotacao-fretes.vercel.app/calcular-frete. Usa a API Sandbox
+do Melhor Envio e serve para validar sem instalar nada ou se o ambiente local der problema.
 
 ## Como rodar
 
+Requisitos: Node 22.19+ ou 24.11+ (versão no [`.nvmrc`](.nvmrc)) e pnpm via Corepack.
+
 ```bash
-pnpm dev        # http://localhost:3000
-pnpm build      # build de produção
-pnpm preview    # serve o build de produção
+nvm use
+corepack enable
+pnpm install
+pnpm dev        # http://localhost:3000/calcular-frete
 ```
+
+Não precisa de `.env` nem de conta no Melhor Envio: o `pnpm dev` usa dados simulados.
+Para o build de produção: `pnpm build` e `pnpm preview`.
+
+## Cotação: mock ou Melhor Envio
+
+A tela chama só a rota interna `POST /api/freight/quote`. O server decide a origem dos dados, e o
+token nunca chega ao navegador.
+
+| Ambiente | Origem dos dados |
+|----------|------------------|
+| `pnpm dev` (padrão) | Mock |
+| `pnpm dev` com `NUXT_FREIGHT_API_MODE=melhor-envio` e token | Sandbox do Melhor Envio |
+| `pnpm build` + `pnpm preview` com token | Sandbox do Melhor Envio |
+| `pnpm build` + `pnpm preview` sem token, ou com `mock` | Erro 503 "Cotação de frete não configurada" |
+
+**Mock:** o resultado é sempre o mesmo, seja qual for o dado digitado: quatro opções e uma
+indisponível. Os dados passam pela mesma normalização da integração real. A tela não indica que são
+simulados; o log do server e o campo `simulated: true` da resposta indicam.
+
+**Sandbox:** para usar a API real localmente:
+
+1. Crie uma conta em https://sandbox.melhorenvio.com.br e um aplicativo em Integrações › Área Dev.
+2. Gere um access token com o escopo `shipping-calculate`
+   ([doc](https://docs.melhorenvio.com.br/reference/solicitacao-do-token)).
+3. Copie o `.env.example` para `.env` e preencha:
+
+   ```bash
+   NUXT_FREIGHT_API_MODE=melhor-envio
+   NUXT_MELHOR_ENVIO_TOKEN=<access token>
+   NUXT_MELHOR_ENVIO_USER_AGENT=FretePro (seu-email@exemplo.com)
+   ```
+
+Exemplo de cotação: origem `01310-100`, destino `20040-020`, 10 × 15 × 20 cm, 1 kg.
 
 ## Qualidade e testes
 
 ```bash
-pnpm lint        # ESLint (@nuxt/eslint)
-pnpm typecheck   # vue-tsc via nuxt typecheck (inclui os testes)
-pnpm test        # Vitest: projetos unit e component
-pnpm test:watch  # Vitest em modo watch
-pnpm test:e2e    # Playwright (Chromium)
+pnpm lint
+pnpm typecheck                         # inclui os testes
+pnpm test                              # Vitest: unit e componente
+pnpm exec playwright install chromium  # só na primeira vez
+pnpm test:e2e                          # faz o build e sobe o app na porta 3100
 ```
 
-Na primeira execução do E2E, instale o navegador:
+Os testes não acessam a rede nem precisam de token: MSW simula o Melhor Envio, e o E2E intercepta a
+rota interna. O [CI](.github/workflows/ci.yml) roda tudo em cada push e pull request.
 
-```bash
-pnpm exec playwright install chromium
-```
+## Problemas comuns
 
-O `pnpm test:e2e` faz o build e sobe o app em `http://localhost:3100` automaticamente.
-
-O CI ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)) roda lint, typecheck, test e test:e2e
-em todo push e pull request.
+| Sintoma | Solução |
+|---------|---------|
+| `ERR_PNPM_UNSUPPORTED_ENGINE` no install | Node antigo; rode `nvm use`. |
+| 503 "Cotação de frete não configurada" | Use `pnpm dev` ou configure o token. |
+| 502 "Serviço de frete indisponível" com `melhor-envio` | Token expirado ou inválido; gere outro. |
+| `.env` alterado sem efeito | Reinicie o servidor. |
+| Nada funciona localmente | Use a [versão publicada](https://sistema-cotacao-fretes.vercel.app/calcular-frete). |
 
 ## Estrutura de pastas
 
 ```
-app/
-  components/ui/              componentes visuais genéricos
-  components/features/quote/  componentes da funcionalidade de cotação
-  composables/                acesso à API via Vue Query
-  pages/                      rotas
-  plugins/                    plugins do Nuxt (Vue Query)
-  utils/                      funções puras (formatadores, máscaras)
-shared/schemas/               schemas zod usados pelo app e pelo server (fonte da verdade da validação)
-shared/types/                 contratos compartilhados entre app e server (resposta da cotação)
-server/api/                   rotas internas (Nitro), ex.: /api/freight/quote
-server/utils/freight/         integração Melhor Envio, mock de desenvolvimento e erros da cotação
-tests/
-  unit/                       Vitest em ambiente Node (schemas, utils)
-  component/                  Vitest em ambiente Nuxt (componentes)
-  mocks/                      handlers e servidor do MSW (respostas simuladas do Melhor Envio)
-  e2e/                        Playwright
-docs/                         registro de decisões
+app/                      páginas, componentes, composables (Vue Query) e utils
+shared/schemas/           schemas zod usados pelo app e pelo server
+shared/types/             contrato da resposta da cotação
+server/api/               rota interna /api/freight/quote
+server/utils/freight/     integração Melhor Envio, mock e erros
+tests/                    unit, component, mocks (MSW) e e2e
+docs/                     decisões e design tokens
 ```
 
 ## Decisões técnicas
 
-A preencher. O registro completo fica em [`docs/DECISIONS.md`](docs/DECISIONS.md).
+Registro completo em [`docs/DECISIONS.md`](docs/DECISIONS.md) (números entre parênteses).
+
+- **Validação única** (003, 017): um schema zod em `shared/schemas` valida o formulário, a URL e o
+  server.
+- **Estado na URL, sem Pinia** (004, 028): reload, histórico e link compartilhado reproduzem a
+  cotação e a tela de resultados.
+- **Vue Query** (002, 025): cache por parâmetros; repetir a mesma cotação não chama a API.
+- **API externa só no server** (021, 023): resposta validada e normalizada num contrato próprio.
+- **Mock nunca é fallback** (022): só existe em `pnpm dev` e não esconde falha da API real.
+
+## Desvios de design
+
+Os design tokens não vieram prontos com o layout: foram gerados automaticamente no Figma durante o
+desenvolvimento e exportados em JSON para [`docs/design/tokens/`](docs/design/tokens/). Esses valores
+não foram alterados; as correções de contraste ficam em variantes `-a11y` separadas.
+
+| No design | Na implementação | Motivo |
+|-----------|------------------|--------|
+| "Calcular frete" antes de "Início"; breadcrumb "Início > Calcular frete" | "Início" primeiro; breadcrumb "Calcular frete > Resultados" (014) | As duas páginas são de primeiro nível, sem relação pai/filho. |
+| Medidas e peso pré-preenchidos | Campos vazios com placeholder (026) | Eram valores de exemplo do layout. |
+| Ícone de pin no seguro | Ícone de cédula (020) | O pin repete o ícone do CEP. |
+| "O CEP inválido" | "CEP inválido" (019) | Erro de digitação; |
+| Botão desabilitado com erros | Sempre habilitado; valida no envio e foca o erro (020) | Botão desabilitado não explica o que falta para quem usa teclado ou leitor de tela. |
+| Textos e item ativo do menu abaixo de 4,5:1 | Variantes `-a11y` (010, 015) | Contraste mínimo do WCAG AA. |
+| Sem foco, hover nem loading; sem layout mobile | Foco `amber/700`, padrões do Nuxt UI e lista no lugar da tabela no mobile (028) | Estados e telas não previstos no design. |
 
 ## Limitações conhecidas
 
-A preencher.
+- Token do Melhor Envio gerado à mão, válido por 30 dias. Não há fluxo OAuth.
+- O Sandbox tem preços de teste e devolve CEP inexistente como opção indisponível, não como erro.
+- Um volume por cotação, com as medidas arredondadas para cima (a API só aceita inteiros).
+- A tela não mostra o motivo de indisponibilidade enviado pela API, só o texto do layout.
+- "Selecionar" só mostra um toast: não há contratação nem histórico. As outras páginas do menu só
+  têm título.
+- Nas máscaras, o cursor vai para o fim do campo quando o texto é reformatado.
+- Só modo claro;
+
+## Próximos passos
+
+Com mais tempo, eu trabalharia em:
+
+- **Contratação do frete:** dar função ao botão "Selecionar" e salvar as cotações na página Histórico.
+- **Autenticação OAuth com o Melhor Envio**, com renovação automática do token.
+- **Motivo da indisponibilidade** visível na tabela, por exemplo num tooltip.
+- **Testes de acessibilidade automatizados** (axe no Playwright) e E2E em Firefox e WebKit.
+- **Modo escuro**, quando o design tiver tokens para ele.
