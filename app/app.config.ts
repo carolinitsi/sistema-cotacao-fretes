@@ -53,15 +53,24 @@ export default defineAppConfig({
     input: {
       slots: {
         base: 'rounded-control',
+        // Ícone numa caixa cinza à esquerda, separada do texto por uma divisória, como no
+        // design. inset-y-px/start-px deixam à mostra o ring de 1px da borda do input.
+        leading: 'inset-y-px start-px aspect-square justify-center rounded-s-control bg-surface-subtle border-e border-default',
         leadingIcon: 'size-icon',
         trailingIcon: 'size-icon'
       },
       variants: {
         size: {
-          md: { base: 'h-control text-body' }
+          md: { base: 'h-control text-body', leading: 'ps-0' }
         }
       },
       compoundVariants: [
+        {
+          // Recuo do texto: largura da caixa do ícone (altura do controle) + respiro.
+          leading: true,
+          size: 'md',
+          class: 'ps-13'
+        },
         {
           color: ['primary', 'error'],
           variant: ['outline', 'subtle'],
@@ -70,7 +79,8 @@ export default defineAppConfig({
         {
           color: 'error',
           highlight: true,
-          class: 'bg-surface-error ring-error-border'
+          // Ícone em vermelho como no design; o texto da mensagem diz o erro, não só a cor.
+          class: { base: 'bg-surface-error ring-error-border', leading: 'border-error-border', leadingIcon: 'text-error-a11y' }
         }
       ]
     },
@@ -78,7 +88,9 @@ export default defineAppConfig({
     formField: {
       slots: {
         label: 'text-label',
-        error: 'text-error-a11y'
+        // empty:hidden: com o slot #error preenchido o contêiner sempre renderiza;
+        // sem erro ele fica vazio e não deve ocupar espaço.
+        error: 'text-error-a11y empty:hidden'
       }
     },
 
