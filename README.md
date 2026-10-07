@@ -66,6 +66,22 @@ pnpm test:e2e                          # faz o build e sobe o app na porta 3100
 Os testes não acessam a rede nem precisam de token: MSW simula o Melhor Envio, e o E2E intercepta a
 rota interna. O [CI](.github/workflows/ci.yml) roda tudo em cada push e pull request.
 
+### O que testei e por quê
+
+O critério foi testar o que quebra a cotação ou engana o usuário: regras de negócio, a fronteira
+com a API externa e os fluxos da tela. Cada camada cobre o que só ela consegue verificar bem.
+
+| Camada | O que cobre | Por quê |
+|--------|-------------|---------|
+| Unit (`tests/unit`) | Schema zod (limites, casas decimais, seguro 0 × vazio), máscaras, formatadores, ordenação dos resultados, leitura e escrita da URL | São as regras de negócio. Funções puras, rápidas, testadas pelas bordas onde os bugs apareceram (centavos acima de R$ 131 mil, "1.250,5" colado). |
+| Integração com MSW (`tests/unit/freight-*`) | Rota do server contra o Melhor Envio simulado: payload enviado, normalização, serviço indisponível, lista vazia, 401, 422, 500, timeout, resposta fora do contrato | A API externa falha de várias formas, e cada uma precisa virar uma mensagem clara, sem repassar a mensagem da API nem ecoar o valor recebido. |
+| Componente (`tests/component`) | Formulário (erros ligados ao campo, `aria-invalid`, foco no primeiro inválido), página de cotação (loading, erro com nova tentativa, vazio, cache ao reenviar), shell | Comportamento que o usuário percebe e a acessibilidade básica, sem subir o navegador. |
+| E2E (`tests/e2e`) | Envio válido e inválido, reload e link pela URL, editar e voltar pelo histórico, layout em 375px sem overflow | Os fluxos ponta a ponta no build de produção, que só um navegador real valida (roteamento, histórico, responsividade). |
+
+Ficou de fora de propósito: o comportamento interno do Nuxt UI e do Vue Query (são testados pelas
+próprias libs), snapshots de HTML (quebram a cada ajuste visual sem indicar defeito) e comparação
+visual com o PNG (o design não tem estados nem tela mobile para comparar).
+
 ## Problemas comuns
 
 | Sintoma | Solução |
