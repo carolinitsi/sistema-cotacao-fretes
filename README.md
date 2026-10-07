@@ -7,7 +7,8 @@ Vitest, MSW e Playwright.
 
 ## Requisitos
 
-- Node.js 22 LTS (versão em [`.nvmrc`](.nvmrc); com nvm: `nvm use`)
+- Node.js 22.19 ou superior (ou 24.11+), versão em [`.nvmrc`](.nvmrc); com nvm: `nvm use`.
+  Versões mais antigas (como Node 20) fazem o `nuxt prepare` falhar, por isso o `pnpm install` as recusa.
 - pnpm (versão fixada em `packageManager` no `package.json`; com Corepack: `corepack enable`)
 
 ## Instalação
