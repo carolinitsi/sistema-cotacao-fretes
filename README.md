@@ -2,7 +2,7 @@
 
 Teste técnico para a vaga de Front-end Pleno (Vue/Nuxt).
 
-Stack: Nuxt 4, Vue 3, TypeScript estrito, Nuxt UI + Tailwind CSS 4, TanStack Vue Query, zod,
+Stack: Nuxt 4, Vue 3, TypeScript, Nuxt UI + Tailwind CSS 4, TanStack Vue Query, zod,
 Vitest, MSW e Playwright.
 
 **Versão publicada:** https://sistema-cotacao-fretes.vercel.app/calcular-frete. Usa a API Sandbox
@@ -145,7 +145,7 @@ não foram alterados; as correções de contraste ficam em variantes `-a11y` sep
 | "Calcular frete" antes de "Início"; breadcrumb "Início > Calcular frete" | "Início" primeiro; breadcrumb "Calcular frete > Resultados" (014) | As duas páginas são de primeiro nível, sem relação pai/filho. |
 | Medidas e peso pré-preenchidos | Campos vazios com placeholder (026) | Eram valores de exemplo do layout. |
 | Ícone de pin no seguro | Ícone de cédula (020) | O pin repete o ícone do CEP. |
-| "O CEP inválido" | "CEP inválido" (019) | Erro de digitação; |
+| "O CEP inválido" | "CEP inválido" (019) | Erro de digitação. |
 | Botão desabilitado com erros | Sempre habilitado; valida no envio e foca o erro (020) | Botão desabilitado não explica o que falta para quem usa teclado ou leitor de tela. |
 | Textos e item ativo do menu abaixo de 4,5:1 | Variantes `-a11y` (010, 015) | Contraste mínimo do WCAG AA. |
 | Sem foco, hover nem loading; sem layout mobile | Foco `amber/700`, padrões do Nuxt UI e lista no lugar da tabela no mobile (028) | Estados e telas não previstos no design. |
@@ -160,7 +160,7 @@ não foram alterados; as correções de contraste ficam em variantes `-a11y` sep
   mostram um estado "Em breve" com o caminho para o cálculo de frete.
 - A busca e as notificações da barra superior seguem o layout, mas ainda não têm função.
 - Nas máscaras, o cursor vai para o fim do campo quando o texto é reformatado.
-- Só modo claro;
+- Só modo claro.
 
 ## Próximos passos
 
