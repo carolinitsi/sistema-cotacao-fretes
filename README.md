@@ -116,6 +116,24 @@ Registro completo em [`docs/DECISIONS.md`](docs/DECISIONS.md) (números entre pa
 - **API externa só no server** (021, 023): resposta validada e normalizada num contrato próprio.
 - **Mock nunca é fallback** (022): só existe em `pnpm dev` e não esconde falha da API real.
 
+## Uso de Inteligência Artificial
+
+A Inteligência Artificial foi utilizada como ferramenta de apoio ao desenvolvimento, principalmente por meio do **Claude Code**, seguindo uma abordagem de **Spec-Driven Development (SDD)**.
+
+O processo envolveu uma etapa inicial de **entrevista e esclarecimento de contexto**, buscando eliminar ambiguidades antes da implementação. A partir disso, foram geradas as specs de cada feature, seguidas pela implementação, revisão manual do código e revisão adicional utilizando a **Skill de Review** do Claude Code.
+
+Os **commits e Pull Requests** também foram criadas com o auxílio de **Skills do Claude Code**, seguindo os padrões e convenções definidos para o projeto.
+
+Para manter o contexto e as decisões documentados, o projeto utiliza:
+
+* **`CLAUDE.md`** — regras e orientações principais do projeto.
+* **`.claude/specs/`** — especificações das features desenvolvidas.
+* **`DECISIONS.md`** — registro das principais decisões técnicas e de design tomadas durante o desenvolvimento.
+
+As sugestões da IA foram analisadas e validadas, com decisões técnicas tomadas de forma independente quando necessário, como estado na URL em vez de Pinia, mock sem fallback para a API real e botão de envio sempre habilitado.
+
+A IA foi utilizada como apoio à implementação, documentação e revisão, mantendo a **validação, tomada de decisões e responsabilidade técnica sob controle do desenvolvimento**.
+
 ## Desvios de design
 
 Os design tokens não vieram prontos com o layout: foram gerados automaticamente no Figma durante o
