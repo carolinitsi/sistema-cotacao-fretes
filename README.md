@@ -2,7 +2,7 @@
 
 Teste técnico para a vaga de Front-end Pleno (Vue/Nuxt).
 
-Stack: Nuxt 4, Vue 3, TypeScript estrito, Nuxt UI + Tailwind CSS 4, TanStack Vue Query, zod,
+Stack: Nuxt 4, Vue 3, TypeScript, Nuxt UI + Tailwind CSS 4, TanStack Vue Query, zod,
 Vitest, MSW e Playwright.
 
 **Versão publicada:** https://sistema-cotacao-fretes.vercel.app/calcular-frete. Usa a API Sandbox
@@ -66,6 +66,22 @@ pnpm test:e2e                          # faz o build e sobe o app na porta 3100
 Os testes não acessam a rede nem precisam de token: MSW simula o Melhor Envio, e o E2E intercepta a
 rota interna. O [CI](.github/workflows/ci.yml) roda tudo em cada push e pull request.
 
+### O que testei e por quê
+
+O critério foi testar o que quebra a cotação ou engana o usuário: regras de negócio, a fronteira
+com a API externa e os fluxos da tela. Cada camada cobre o que só ela consegue verificar bem.
+
+| Camada | O que cobre | Por quê |
+|--------|-------------|---------|
+| Unit (`tests/unit`) | Schema zod (limites, casas decimais, seguro 0 × vazio), máscaras, formatadores, ordenação dos resultados, leitura e escrita da URL | São as regras de negócio. Funções puras, rápidas, testadas pelas bordas onde os bugs apareceram (centavos acima de R$ 131 mil, "1.250,5" colado). |
+| Integração com MSW (`tests/unit/freight-*`) | Rota do server contra o Melhor Envio simulado: payload enviado, normalização, serviço indisponível, lista vazia, 401, 422, 500, timeout, resposta fora do contrato | A API externa falha de várias formas, e cada uma precisa virar uma mensagem clara, sem repassar a mensagem da API nem ecoar o valor recebido. |
+| Componente (`tests/component`) | Formulário (erros ligados ao campo, `aria-invalid`, foco no primeiro inválido), página de cotação (loading, erro com nova tentativa, vazio, cache ao reenviar), shell | Comportamento que o usuário percebe e a acessibilidade básica, sem subir o navegador. |
+| E2E (`tests/e2e`) | Envio válido e inválido, reload e link pela URL, editar e voltar pelo histórico, layout em 375px sem overflow | Os fluxos ponta a ponta no build de produção, que só um navegador real valida (roteamento, histórico, responsividade). |
+
+Ficou de fora de propósito: o comportamento interno do Nuxt UI e do Vue Query (são testados pelas
+próprias libs), snapshots de HTML (quebram a cada ajuste visual sem indicar defeito) e comparação
+visual com o PNG (o design não tem estados nem tela mobile para comparar).
+
 ## Problemas comuns
 
 | Sintoma | Solução |
@@ -100,6 +116,24 @@ Registro completo em [`docs/DECISIONS.md`](docs/DECISIONS.md) (números entre pa
 - **API externa só no server** (021, 023): resposta validada e normalizada num contrato próprio.
 - **Mock nunca é fallback** (022): só existe em `pnpm dev` e não esconde falha da API real.
 
+## Uso de Inteligência Artificial
+
+A Inteligência Artificial foi utilizada como ferramenta de apoio ao desenvolvimento, principalmente por meio do **Claude Code**, seguindo uma abordagem de **Spec-Driven Development (SDD)**.
+
+O processo envolveu uma etapa inicial de **entrevista e esclarecimento de contexto**, buscando eliminar ambiguidades antes da implementação. A partir disso, foram geradas as specs de cada feature, seguidas pela implementação, revisão manual do código e revisão adicional utilizando a **Skill de Review** do Claude Code.
+
+Os **commits e Pull Requests** também foram criadas com o auxílio de **Skills do Claude Code**, seguindo os padrões e convenções definidos para o projeto.
+
+Para manter o contexto e as decisões documentados, o projeto utiliza:
+
+* **`CLAUDE.md`** — regras e orientações principais do projeto.
+* **`.claude/specs/`** — especificações das features desenvolvidas.
+* **`DECISIONS.md`** — registro das principais decisões técnicas e de design tomadas durante o desenvolvimento.
+
+As sugestões da IA foram analisadas e validadas, com decisões técnicas tomadas de forma independente quando necessário, como estado na URL em vez de Pinia, mock sem fallback para a API real e botão de envio sempre habilitado.
+
+A IA foi utilizada como apoio à implementação, documentação e revisão, mantendo a **validação, tomada de decisões e responsabilidade técnica sob controle do desenvolvimento**.
+
 ## Desvios de design
 
 Os design tokens não vieram prontos com o layout: foram gerados automaticamente no Figma durante o
@@ -111,7 +145,7 @@ não foram alterados; as correções de contraste ficam em variantes `-a11y` sep
 | "Calcular frete" antes de "Início"; breadcrumb "Início > Calcular frete" | "Início" primeiro; breadcrumb "Calcular frete > Resultados" (014) | As duas páginas são de primeiro nível, sem relação pai/filho. |
 | Medidas e peso pré-preenchidos | Campos vazios com placeholder (026) | Eram valores de exemplo do layout. |
 | Ícone de pin no seguro | Ícone de cédula (020) | O pin repete o ícone do CEP. |
-| "O CEP inválido" | "CEP inválido" (019) | Erro de digitação; |
+| "O CEP inválido" | "CEP inválido" (019) | Erro de digitação. |
 | Botão desabilitado com erros | Sempre habilitado; valida no envio e foca o erro (020) | Botão desabilitado não explica o que falta para quem usa teclado ou leitor de tela. |
 | Textos e item ativo do menu abaixo de 4,5:1 | Variantes `-a11y` (010, 015) | Contraste mínimo do WCAG AA. |
 | Sem foco, hover nem loading; sem layout mobile | Foco `amber/700`, padrões do Nuxt UI e lista no lugar da tabela no mobile (028) | Estados e telas não previstos no design. |
@@ -122,10 +156,11 @@ não foram alterados; as correções de contraste ficam em variantes `-a11y` sep
 - O Sandbox tem preços de teste e devolve CEP inexistente como opção indisponível, não como erro.
 - Um volume por cotação, com as medidas arredondadas para cima (a API só aceita inteiros).
 - A tela não mostra o motivo de indisponibilidade enviado pela API, só o texto do layout.
-- "Selecionar" só mostra um toast: não há contratação nem histórico. As outras páginas do menu só
-  têm título.
+- "Selecionar" só mostra um toast: não há contratação nem histórico. As outras páginas do menu
+  mostram um estado "Em breve" com o caminho para o cálculo de frete.
+- A busca e as notificações da barra superior seguem o layout, mas ainda não têm função.
 - Nas máscaras, o cursor vai para o fim do campo quando o texto é reformatado.
-- Só modo claro;
+- Só modo claro.
 
 ## Próximos passos
 

@@ -239,3 +239,10 @@ Decisões técnicas relevantes e seus trade-offs. Cada entrada segue o formato:
 - **Decisão:** `engines.node` no `package.json` com a mesma faixa do Nuxt, `engineStrict: true` no `pnpm-workspace.yaml` e `.nvmrc` com `22.22`. O README informa a versão mínima.
 - **Alternativas:** só documentar no README; deixar o `postinstall` tolerar falhas (`nuxt prepare || true`).
 - **Motivo:** com `engineStrict`, o pnpm recusa a instalação logo no início, com uma mensagem que aponta a versão esperada e a atual (`ERR_PNPM_UNSUPPORTED_ENGINE`). Só a documentação não evita o erro confuso, e tolerar a falha esconderia o problema até o `pnpm dev`. O `.nvmrc` mais preciso faz o `nvm use` instalar uma versão compatível.
+
+## 030. Páginas ainda não implementadas com estado vazio
+
+- **Contexto:** Início, Histórico, Configurações, Ajuda e Perfil só tinham título. Como `/` redireciona para `/inicio` (decisão 014), quem abria a raiz caía numa página sem conteúdo e sem caminho para o único fluxo pronto.
+- **Decisão:** cada uma dessas páginas mostra um `UEmpty` abaixo do título. Em Início, um convite para cotar o primeiro frete, com o botão primário "Calcular frete". Nas demais, "Em breve", com um texto do que a página terá e "Calcular frete" como ação secundária (`neutral`/`outline`). A busca e as notificações da barra superior continuam sem função e entram nas limitações do README.
+- **Alternativas:** redirecionar `/` para `/calcular-frete`; esconder do menu os itens sem conteúdo; montar um painel em Início com dados fictícios.
+- **Motivo:** mantém a navegação da decisão 014 e o menu do layout, e nenhuma página termina sem saída. Mudar o redirecionamento contrariaria a 014 só para resolver a primeira impressão, e dados fictícios dariam a entender que há funcionalidades que não existem.
