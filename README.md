@@ -122,8 +122,9 @@ não foram alterados; as correções de contraste ficam em variantes `-a11y` sep
 - O Sandbox tem preços de teste e devolve CEP inexistente como opção indisponível, não como erro.
 - Um volume por cotação, com as medidas arredondadas para cima (a API só aceita inteiros).
 - A tela não mostra o motivo de indisponibilidade enviado pela API, só o texto do layout.
-- "Selecionar" só mostra um toast: não há contratação nem histórico. As outras páginas do menu só
-  têm título.
+- "Selecionar" só mostra um toast: não há contratação nem histórico. As outras páginas do menu
+  mostram um estado "Em breve" com o caminho para o cálculo de frete.
+- A busca e as notificações da barra superior seguem o layout, mas ainda não têm função.
 - Nas máscaras, o cursor vai para o fim do campo quando o texto é reformatado.
 - Só modo claro;
 
