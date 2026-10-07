@@ -232,3 +232,10 @@ Decisões técnicas relevantes e seus trade-offs. Cada entrada segue o formato:
   - A rota aninhada criaria uma segunda página para o mesmo fluxo, e o `ref` local se perderia no reload e não chegaria ao breadcrumb, que fica no layout.
   - Mostrar os resultados já no envio deixa o loading igual no envio e no reload. A lista no mobile evita ler uma tabela de cinco colunas com scroll lateral em 375px.
   - O botão de seleção foi pedido para manter o layout. O toast deixa claro que a contratação ainda não existe.
+
+## 029. Versão mínima do Node declarada e exigida na instalação
+
+- **Contexto:** num clone limpo com Node 20, o `pnpm install` terminava com `ERR_PNPM_EXECUTOR_LIFECYCLE_SCRIPT_FAILED`: o `postinstall` (`nuxt prepare`) falhava, sem indicar que a causa era a versão do Node. O Nuxt 4.5 exige `^22.19.0 || ^24.11.0 || >=26.0.0`, mas o projeto não declarava `engines`, e o `.nvmrc` dizia só `22`.
+- **Decisão:** `engines.node` no `package.json` com a mesma faixa do Nuxt, `engineStrict: true` no `pnpm-workspace.yaml` e `.nvmrc` com `22.22`. O README informa a versão mínima.
+- **Alternativas:** só documentar no README; deixar o `postinstall` tolerar falhas (`nuxt prepare || true`).
+- **Motivo:** com `engineStrict`, o pnpm recusa a instalação logo no início, com uma mensagem que aponta a versão esperada e a atual (`ERR_PNPM_UNSUPPORTED_ENGINE`). Só a documentação não evita o erro confuso, e tolerar a falha esconderia o problema até o `pnpm dev`. O `.nvmrc` mais preciso faz o `nvm use` instalar uma versão compatível.
