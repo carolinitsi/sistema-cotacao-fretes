@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { QuoteRequest } from '#shared/schemas/quote'
-import { parseQuoteQuery, quoteRequestToQuery } from '~/utils/quote-query'
+import { getQuotedRequest, isEditingQuote, parseQuoteQuery, quoteRequestToEditQuery, quoteRequestToQuery } from '~/utils/quote-query'
 
 const request: QuoteRequest = {
   originCep: '01310100',
@@ -65,5 +65,33 @@ describe('parseQuoteQuery', () => {
     ['seguro não numérico', { ...query, insuranceBrl: 'grátis' }]
   ])('devolve null com %s', (_, input) => {
     expect(parseQuoteQuery(input)).toBeNull()
+  })
+})
+
+describe('modo de edição', () => {
+  it('grava os mesmos dados com a flag de edição', () => {
+    expect(quoteRequestToEditQuery(request)).toEqual({ ...query, edit: '1' })
+  })
+
+  it('reconhece a flag só com o valor 1', () => {
+    expect(isEditingQuote({ ...query, edit: '1' })).toBe(true)
+    expect(isEditingQuote(query)).toBe(false)
+    expect(isEditingQuote({ ...query, edit: 'true' })).toBe(false)
+  })
+
+  it('mantém o request legível no modo de edição', () => {
+    expect(parseQuoteQuery(quoteRequestToEditQuery(request))).toEqual(request)
+  })
+})
+
+describe('getQuotedRequest', () => {
+  it('devolve o request para a tela de resultados', () => {
+    expect(getQuotedRequest(query)).toEqual(request)
+  })
+
+  it('devolve null no modo de edição ou com a query inválida', () => {
+    expect(getQuotedRequest(quoteRequestToEditQuery(request))).toBeNull()
+    expect(getQuotedRequest({ ...query, heightCm: '500' })).toBeNull()
+    expect(getQuotedRequest({})).toBeNull()
   })
 })

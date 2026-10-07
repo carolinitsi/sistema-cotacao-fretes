@@ -118,6 +118,7 @@ Decisões técnicas relevantes e seus trade-offs. Cada entrada segue o formato:
 - **Decisão:** "Início" e "Calcular frete" são rotas de primeiro nível. A navegação lateral fica com "Início" antes de "Calcular frete", e `/` redireciona para `/inicio`. O breadcrumb reflete a hierarquia real das rotas, sem representar "Calcular frete" como subpágina de "Início". Os labels vêm de um mapeamento único em `app/utils/navigation.ts`, usado pelo menu e pelo breadcrumb.
 - **Alternativas:** reproduzir literalmente a ordem e o breadcrumb do layout; manter "Calcular frete" como primeiro item com "Início > Calcular frete"; ajustar a navegação para refletir a hierarquia real das páginas.
 - **Motivo:** a hierarquia de navegação deve ser consistente com a estrutura das rotas. O breadcrumb não deve sugerir uma relação pai/filho que não existe, e isso evita inconsistência entre a navegação lateral e a estrutura de informação da aplicação.
+- **Atualização:** "Resultados" é um estado de "Calcular frete" vindo da query, não uma rota; o breadcrumb também lê a query nesse caso (ver 028).
 
 ## 015. Application shell com os componentes Dashboard do Nuxt UI
 
@@ -202,6 +203,7 @@ Decisões técnicas relevantes e seus trade-offs. Cada entrada segue o formato:
 - **Decisão:** o `FreightQuoteForm` edita um `QuoteFormState` próprio (`app/utils/quote-form.ts`), validado pelo `UForm` com o `quoteRequestSchema`. No envio válido, `mapFormToQuoteRequest` gera o `QuoteRequest`, e `useQuoteRequestQuery` grava a query string com `router.push`. O `useFreightQuote` recebe o request lido da URL por `parseQuoteQuery`, que converte o texto em número na borda e valida com o mesmo schema: query incompleta, inválida ou fora dos limites vira `null` e não cota. As chaves da query são as do schema, o seguro vazio fica fora da URL e o seguro `0` é gravado. Um `watch` sobre o request da URL atualiza o formulário ao voltar ou avançar no histórico. Reenviar o mesmo request não muda a URL e usa o cache; depois de um erro, o reenvio chama `refetch`. O `FreightFormSection` só desenha a seção (ícone, título, descrição e slot) e não conhece campos, validação nem API. Os campos de medida e peso começam vazios, com placeholder; os valores do design (2, 12, 17 e 0,30) eram inconsistência. O `UForm` usa `:loading-auto="false"`, porque o loading automático desabilita os campos durante o envio e impede o foco no primeiro campo inválido; o loading da tela é o `isFetching` da cotação.
 - **Alternativas:** request em um `ref` local; passar o estado do formulário direto ao `useFreightQuote`; nomes curtos ou traduzidos na query.
 - **Motivo:** o estado de edição pode ser inválido sem afetar a cotação, e só um envio válido muda o que é cotado. A URL torna a cotação compartilhável e preservada no reload e no histórico, e o schema protege as duas pontas, inclusive contra URL editada à mão. Chaves iguais às do schema dispensam um mapeamento extra.
+- **Atualização:** o `watch(request)` foi substituído pela remontagem do formulário por `:key`, e a cotação, o loading e o erro saíram do formulário para a tela de resultados (ver 028).
 
 ## 027. Cotação só no cliente
 
@@ -209,3 +211,24 @@ Decisões técnicas relevantes e seus trade-offs. Cada entrada segue o formato:
 - **Decisão:** o `FreightQuoteForm` só passa o request ao `useFreightQuote` depois de montar (`onMounted`). O servidor renderiza o formulário preenchido, sem cotação, e o cliente cota uma vez.
 - **Alternativas:** prefetch no SSR com `onServerPrefetch` e `suspense()`, para entregar o resultado no HTML.
 - **Motivo:** uma chamada por acesso. Robôs e prévias de link (que fazem só o SSR) não consomem a API de frete. O E2E consegue interceptar a rota no navegador. O prefetch deixaria o primeiro byte esperando a transportadora (até 10 s) e não desidrata erros, que seriam buscados de novo no cliente.
+
+## 028. Tela de resultados como estado da página, decidido pela URL
+
+- **Contexto:** depois de um envio válido, a página `/calcular-frete` deve trocar o formulário pela tela de resultados (resumo e tabela de opções), com breadcrumb "Calcular frete > Resultados" e um botão "Editar dados" que volta ao formulário preenchido. Reload, histórico e link compartilhado precisam reproduzir a tela.
+- **Decisão:**
+  - Formulário e resultados são estados da mesma página. Query válida → resultados. A mesma query com `edit=1` → formulário preenchido. O envio grava a query sem a flag (`router.push`). As funções ficam em `app/utils/quote-query.ts` (`getQuotedRequest`, `quoteRequestToEditQuery`), e o `useQuoteRequestQuery` expõe `quotedRequest` e `editRequest`.
+  - O breadcrumb acrescenta "Resultados" (com `aria-current`) quando há `quotedRequest`. "Calcular frete" vira link para `/calcular-frete`, uma cotação nova, como o menu.
+  - O `FreightQuoteForm` só edita e emite o request válido. A página o remonta por `:key` quando o request da URL muda de valor, no lugar do `watch`.
+  - O `useFreightQuote` roda no `FreightQuoteResults`, montado só na tela de resultados. Editar não cota, e reabrir em `edit=1` também não. O resumo vem da URL e aparece já no loading, com skeleton nas linhas (fora da árvore de acessibilidade) e o status anunciado. O erro aparece ali, com "Tentar novamente" (`refetch`).
+  - Após enviar ou editar, o foco vai para o título da página (o botão clicado some da tela).
+  - Opções disponíveis ordenadas por preço (empate: menor prazo); indisponíveis no fim, com o botão desabilitado e o texto fixo do layout, "Transportadora não atende este trecho.", no lugar do prazo, e a célula de valor vazia. O `disabledReason` continua no contrato, mas não é exibido (muda o que a 023 previa na tela). Prazo com faixa: "1 a 2 dias úteis".
+  - A coluna "Transportadora" mostra só o logotipo (até 20px de altura, `max-h-5`), com o nome no `alt`. Sem logo, ou se a imagem falhar, o nome aparece como texto.
+  - `UTable` a partir de `md`, com o cabeçalho em `bg-elevated/50`; abaixo disso, lista (`ul`) com os mesmos dados.
+  - Sem aviso de "Cotação simulada" na tela, a pedido do layout. O `simulated` continua na resposta, e o modo mock segue identificado pelo aviso no log do server e pelo 503 fora de `pnpm dev` (ver 022).
+  - A coluna "Ações" segue o layout, mas ainda não há fluxo de contratação: o botão mostra um toast "em breve".
+- **Alternativas:** rota aninhada `/calcular-frete/resultados`; modo de edição num `ref` local; ficar no formulário até a cotação terminar; tabela com scroll horizontal no mobile; omitir a coluna "Ações".
+- **Motivo:**
+  - Com o modo na URL, reload, voltar/avançar e link reproduzem a tela sem estado global (decisão 004). A cotação continua na mesma chave de cache, então reenviar o mesmo request não chama a API.
+  - A rota aninhada criaria uma segunda página para o mesmo fluxo, e o `ref` local se perderia no reload e não chegaria ao breadcrumb, que fica no layout.
+  - Mostrar os resultados já no envio deixa o loading igual no envio e no reload. A lista no mobile evita ler uma tabela de cinco colunas com scroll lateral em 375px.
+  - O botão de seleção foi pedido para manter o layout. O toast deixa claro que a contratação ainda não existe.

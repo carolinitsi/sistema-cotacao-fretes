@@ -36,7 +36,9 @@ async function fillForm(page: Page, values: { origin: string, height: string }) 
   await page.getByLabel('Peso (kg)').fill('0,3')
 }
 
-test('cota após um envio válido e grava os dados na URL', async ({ page }) => {
+const validUrl = '/calcular-frete?originCep=01310100&destinationCep=20040002&heightCm=2&widthCm=12&lengthCm=17&weightKg=0.3&insuranceBrl=0'
+
+test('troca o formulário pelos resultados após um envio válido', async ({ page }) => {
   const bodies = await mockQuoteRoute(page)
   await page.goto('/calcular-frete')
 
@@ -45,8 +47,10 @@ test('cota após um envio válido e grava os dados na URL', async ({ page }) => 
 
   await page.getByRole('button', { name: 'Calcular frete' }).click()
 
-  await expect(page.getByRole('heading', { name: 'Opções de frete' })).toBeVisible()
-  await expect(page.getByText('Correios')).toBeVisible()
+  await expect(page.getByRole('heading', { level: 1, name: 'Cotações de frete' })).toBeVisible()
+  await expect(page.getByRole('navigation', { name: 'breadcrumb' })).toContainText('Resultados')
+  await expect(page.getByRole('row', { name: /Correios.*PAC/ })).toBeVisible()
+  await expect(page.locator('form')).toHaveCount(0)
   await expect(page).toHaveURL(/originCep=01310100/)
   expect(bodies).toEqual([{
     originCep: '01310100',
@@ -72,21 +76,46 @@ test('não cota com o formulário inválido e foca o primeiro erro', async ({ pa
   expect(bodies).toHaveLength(0)
 })
 
-test('reabre a cotação pela URL e volta à anterior pelo histórico', async ({ page }) => {
+test('reabre os resultados pela URL, inclusive no reload', async ({ page }) => {
   const bodies = await mockQuoteRoute(page)
-  await page.goto('/calcular-frete?originCep=01310100&destinationCep=20040002&heightCm=2&widthCm=12&lengthCm=17&weightKg=0.3&insuranceBrl=0')
+  await page.goto(validUrl)
 
+  await expect(page.getByRole('row', { name: /Correios.*PAC/ })).toBeVisible()
+  await expect(page.getByText('01310-100')).toBeVisible()
+
+  await page.reload()
+
+  await expect(page.getByRole('row', { name: /Correios.*PAC/ })).toBeVisible()
+  // Uma chamada por carregamento da página (o cache do Vue Query vive na memória).
+  expect(bodies).toHaveLength(2)
+})
+
+test('edita os dados, cota de novo e volta pelo histórico', async ({ page }) => {
+  const bodies = await mockQuoteRoute(page)
+  await page.goto(validUrl)
+  await expect(page.getByRole('row', { name: /Correios.*PAC/ })).toBeVisible()
+
+  await page.getByRole('button', { name: 'Editar dados' }).click()
+
+  await expect(page).toHaveURL(/edit=1/)
+  await expect(page.getByRole('heading', { level: 1, name: 'Calcular frete' }).locator('[tabindex="-1"]')).toBeFocused()
   await expect(page.getByLabel('CEP de origem')).toHaveValue('01310-100')
-  await expect(page.getByText('Correios')).toBeVisible()
+  await expect(page.getByLabel('Altura (cm)')).toHaveValue('2')
 
   await page.getByLabel('Altura (cm)').fill('5')
   await page.getByRole('button', { name: 'Calcular frete' }).click()
+
   await expect(page).toHaveURL(/heightCm=5/)
+  await expect(page).not.toHaveURL(/edit=1/)
+  await expect(page.getByText('5 × 12 × 17 cm')).toBeVisible()
+  expect(bodies).toHaveLength(2)
 
   await page.goBack()
-
-  await expect(page).toHaveURL(/heightCm=2/)
   await expect(page.getByLabel('Altura (cm)')).toHaveValue('2')
+
+  await page.goBack()
+  await expect(page.getByText('2 × 12 × 17 cm')).toBeVisible()
+  // A cotação anterior vem do cache.
   expect(bodies).toHaveLength(2)
 })
 
@@ -106,5 +135,17 @@ test.describe('em tela pequena', () => {
     const origin = await page.getByLabel('CEP de origem').boundingBox()
     const destination = await page.getByLabel('CEP de destino').boundingBox()
     expect(destination?.y).toBeGreaterThan((origin?.y ?? 0) + (origin?.height ?? 0))
+  })
+
+  test('mostra os resultados em lista, sem overflow horizontal', async ({ page }) => {
+    await mockQuoteRoute(page)
+    await page.goto(validUrl)
+
+    await expect(page.getByRole('list', { name: 'Opções de frete' })).toBeVisible()
+    await expect(page.getByRole('table')).toBeHidden()
+    await expect(page.getByRole('button', { name: 'Selecionar Correios PAC' })).toBeVisible()
+
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)
+    expect(overflow).toBe(0)
   })
 })
