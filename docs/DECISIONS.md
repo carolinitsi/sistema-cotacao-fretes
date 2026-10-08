@@ -211,6 +211,7 @@ Decisões técnicas relevantes e seus trade-offs. Cada entrada segue o formato:
 - **Decisão:** o `FreightQuoteForm` só passa o request ao `useFreightQuote` depois de montar (`onMounted`). O servidor renderiza o formulário preenchido, sem cotação, e o cliente cota uma vez.
 - **Alternativas:** prefetch no SSR com `onServerPrefetch` e `suspense()`, para entregar o resultado no HTML.
 - **Motivo:** uma chamada por acesso. Robôs e prévias de link (que fazem só o SSR) não consomem a API de frete. O E2E consegue interceptar a rota no navegador. O prefetch deixaria o primeiro byte esperando a transportadora (até 10 s) e não desidrata erros, que seriam buscados de novo no cliente.
+- **Atualização:** com a tela de resultados (ver 028), a cotação saiu do formulário. O `onMounted` agora fica no `FreightQuoteResults`, que só passa o request ao `useFreightQuote` depois de montar. O servidor renderiza o resumo em loading, sem cotação.
 
 ## 028. Tela de resultados como estado da página, decidido pela URL
 
