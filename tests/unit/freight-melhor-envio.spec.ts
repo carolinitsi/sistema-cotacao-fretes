@@ -155,6 +155,20 @@ describe('integração Melhor Envio', () => {
     expect(error.message).toBe('Resposta inválida do serviço de frete.')
   })
 
+  // Valores que virariam NaN, ∞ ou prazo negativo na tela.
+  it.each([
+    ['preço não numérico', { custom_price: 'NaN' }],
+    ['preço infinito', { custom_price: 'Infinity' }],
+    ['prazo negativo', { custom_delivery_time: -1 }]
+  ])('responde 502 para serviço com %s', async (_, override) => {
+    server.use(http.post(MELHOR_ENVIO_CALCULATE_URL, () => HttpResponse.json([{ ...melhorEnvioFixtures.success[0], ...override }])))
+
+    const error = await quoteError()
+
+    expect(error.statusCode).toBe(502)
+    expect(error.message).toBe('Resposta inválida do serviço de frete.')
+  })
+
   it('responde 504 quando a API passa do tempo limite', async () => {
     server.use(melhorEnvioHandlers.slow(500))
 
