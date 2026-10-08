@@ -58,6 +58,14 @@ describe('quoteRequestSchema', () => {
       expect(errorsFor({ [field]: undefined })[field]).toEqual([message])
     })
 
+    it.each([
+      ['NaN', NaN],
+      ['infinito', Infinity],
+      ['texto numérico', '10']
+    ])('rejeita %s como medida', (_, value) => {
+      expect(errorsFor({ heightCm: value }).heightCm).toEqual(['Informe a altura.'])
+    })
+
     it('rejeita valores negativos', () => {
       expect(errorsFor({ widthCm: -1 }).widthCm).toEqual(['A largura deve ser maior que 0.'])
     })

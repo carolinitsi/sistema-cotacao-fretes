@@ -33,7 +33,8 @@ describe('formatDimensions', () => {
 })
 
 describe('formatDeliveryTime', () => {
-  it('usa singular para 1 dia e plural para os demais', () => {
+  it('usa singular para 1 dia e plural para os demais, inclusive 0', () => {
+    expect(formatDeliveryTime(0)).toBe('0 dias úteis')
     expect(formatDeliveryTime(1)).toBe('1 dia útil')
     expect(formatDeliveryTime(3)).toBe('3 dias úteis')
   })
